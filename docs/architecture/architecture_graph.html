@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>ShorTED — Service Architecture</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background: #f4f5f7;
+  font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 44px 24px 56px;
+  min-height: 100vh;
+  color: #1f2937;
+}
+.brand {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: #111827;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.brand span { color: #b91c1c; }
+.sub {
+  font-size: 11px;
+  color: #6b7280;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 32px;
+  font-weight: 500;
+}
+.wrap {
+  width: 100%;
+  max-width: 1300px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.03);
+}
+svg { display: block; width: 100%; height: auto; }
+</style>
+</head>
+<body>
+
+<div class="brand">Shor<span>TED</span></div>
+<div class="sub">Service Architecture &nbsp;·&nbsp; Cloud &amp; Mobile &nbsp;·&nbsp; UniBG 2025–26</div>
+
+<div class="wrap">
+<svg viewBox="0 0 1280 830" xmlns="http://www.w3.org/2000/svg"
+     font-family="'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif">
+
+<!-- ─────────────────── DEFS ─────────────────── -->
+<defs>
+  <marker id="a0" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0,7 2.5,0 5" fill="#64748b"/></marker>
+  <marker id="ag" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0,7 2.5,0 5" fill="#16a34a"/></marker>
+  <marker id="ao" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0,7 2.5,0 5" fill="#ea580c"/></marker>
+  <marker id="ap" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0,7 2.5,0 5" fill="#7c3aed"/></marker>
+  <marker id="ar" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0,7 2.5,0 5" fill="#BF2E7E"/></marker>
+  <marker id="ab" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0,7 2.5,0 5" fill="#0284c7"/></marker>
+</defs>
+
+<!-- ─────────────────── BACKGROUND ─────────────────── -->
+<rect width="1280" height="830" fill="#ffffff"/>
+
+<!-- ─────────────────── LAYER BANDS ─────────────────── -->
+
+<!-- L1: Data Pipeline -->
+<rect x="10" y="10" width="1260" height="385" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+<text x="30" y="32" font-size="9" font-weight="700" fill="#1e40af" letter-spacing="3">DATA PIPELINE</text>
+
+<!-- L2: Backend API -->
+<rect x="10" y="406" width="1260" height="198" rx="8" fill="#fff7ed" stroke="#fed7aa" stroke-width="1"/>
+<text x="30" y="427" font-size="9" font-weight="700" fill="#c2410c" letter-spacing="3">BACKEND API</text>
+
+<!-- L3: Mobile -->
+<rect x="10" y="614" width="1260" height="190" rx="8" fill="#faf5ff" stroke="#e9d5ff" stroke-width="1"/>
+<text x="30" y="635" font-size="9" font-weight="700" fill="#6d28d9" letter-spacing="3">MOBILE</text>
+
+<!-- ─────────────────── HELPER: card macro (rect+clip area) ─────────────────── -->
+<!-- Each card: 64×64 icon box + label below. Anchor = top-left of icon box. -->
+
+<!-- ══════════════════════════════════════════
+     LAYER 1 CARDS
+     Main row y_center=225  → icon top = 193, label y = 273
+     Ingestion column x_center=78  → CSV cy=155, λTR cy=305
+══════════════════════════════════════════ -->
+
+<!-- ── 1a CSV Dataset  cx=78 cy=155 ── -->
+<rect x="46" y="123" width="64" height="64" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+<rect x="57" y="136" width="42" height="6"  rx="1.5" fill="#475569"/>
+<rect x="57" y="147" width="42" height="5"  rx="1.5" fill="#94a3b8"/>
+<rect x="57" y="156" width="42" height="5"  rx="1.5" fill="#94a3b8"/>
+<rect x="57" y="165" width="28" height="5"  rx="1.5" fill="#94a3b8"/>
+<text x="78"  y="205" text-anchor="middle" font-size="9"  font-weight="600" fill="#334155">CSV Dataset</text>
+
+<!-- ── 1b Lambda Transcript  cx=78 cy=305 ── -->
+<rect x="46" y="273" width="64" height="64" rx="6" fill="#ffffff" stroke="#ea580c" stroke-width="1.2"/>
+<image href="https://raw.githubusercontent.com/gilbarbara/logos/master/logos/aws-lambda.svg" x="46" y="273" width="64" height="64" preserveAspectRatio="xMidYMid meet"/>
+<text x="78"  y="356" text-anchor="middle" font-size="9"  font-weight="600" fill="#9a3412">Transcript</text>
+<text x="78"  y="368" text-anchor="middle" font-size="8"  fill="#c2410c">Fetcher</text>
+
+<!-- ── 2 S3 Raw  cx=215 cy=225 ── -->
+<rect x="183" y="193" width="64" height="64" rx="6" fill="#ffffff" stroke="#16a34a" stroke-width="1.2"/>
+<image href="https://raw.githubusercontent.com/gilbarbara/logos/master/logos/aws-s3.svg" x="183" y="193" width="64" height="64" preserveAspectRatio="xMidYMid meet"/>
+<text x="215" y="275" text-anchor="middle" font-size="9"  font-weight="600" fill="#15803d">S3  Raw</text>
+<text x="215" y="287" text-anchor="middle" font-size="8"  fill="#16a34a">shorted-raw</text>
+
+<!-- ── 3 AWS Glue  cx=380 cy=225 ── -->
+<rect x="348" y="193" width="64" height="64" rx="6" fill="#ffffff" stroke="#7c3aed" stroke-width="1.2"/>
+<image href="https://raw.githubusercontent.com/gilbarbara/logos/master/logos/aws-glue.svg" x="348" y="193" width="64" height="64" preserveAspectRatio="xMidYMid meet"/>
+<text x="380" y="275" text-anchor="middle" font-size="9"  font-weight="600" fill="#6d28d9">AWS Glue</text>
+<text x="380" y="287" text-anchor="middle" font-size="8"  fill="#7c3aed">PySpark ETL</text>
+
+<!-- ── 4 S3 Processed  cx=545 cy=225 ── -->
+<rect x="513" y="193" width="64" height="64" rx="6" fill="#ffffff" stroke="#16a34a" stroke-width="1.2"/>
+<image href="https://raw.githubusercontent.com/gilbarbara/logos/master/logos/aws-s3.svg" x="513" y="193" width="64" height="64" preserveAspectRatio="xMidYMid meet"/>
+<text x="545" y="275" text-anchor="middle" font-size="9"  font-weight="600" fill="#15803d">S3  Processed</text>
+<text x="545" y="287" text-anchor="middle" font-size="8"  fill="#16a34a">shorted-processed</text>
+
+<!-- ── 5.1 Lambda Dispatcher  cx=710 cy=225 ── -->
+<rect x="678" y="193" width="64" height="64" rx="6" fill="#ffffff" stroke="#ea580c" stroke-width="1.2"/>
+<image href="https://raw.githubusercontent.com/gilbarbara/logos/master/logos/aws-lambda.svg" x="678" y="193" width="64" height="64" preserveAspectRatio="xMidYMid meet"/>
+<text x="710"  y="275" text-anchor="middle" font-size="9"  font-weight="600" fill="#9a3412">Dispatcher</text>
+
+<!-- ── 5.2 SQS  cx=875 cy=225 ── -->
+<rect x="843" y="193" width="64" height="64" rx="6" fill="#ffffff" stroke="#e11d48" stroke-width="1.2"/>
+<image href="https://raw.githubusercontent.com/gilbarbara/logos/master/logos/aws-sqs.svg" x="843" y="193" width="64" height="64" preserveAspectRatio="xMidYMid meet"/>
+<text x="875" y="275" text-anchor="middle" font-size="9"  font-weight="600" fill="#be123c">Amazon SQS</text>
+
+<!-- ── 6 Lambda AI  cx=1040 cy=225 ── -->
+<rect x="1008" y="193" width="64" height="64" rx="6" fill="#ffffff" stroke="#ea580c" stroke-width="1.5"/>
+<image href="https://raw.githubusercontent.com/gilbarbara/logos/master/logos/aws-lambda.svg" x="1008" y="193" width="64" height="64" preserveAspectRatio="xMidYMid meet"/>
+<text x="1040" y="275" text-anchor="middle" font-size="9"  font-weight="600" fill="#9a3412">Lambda AI</text>
+
+<!-- ── Bedrock  cx=1195 cy=225  (external, dashed) ── -->
+<rect x="1158" y="193" width="80" height="64" rx="6" fill="#ffffff" stroke="#0284c7" stroke-width="1.2" stroke-dasharray="5,3"/>
+<image href="https://unpkg.com/@lobehub/icons-static-svg@latest/icons/bedrock-color.svg" x="1166" y="201" width="64" height="48" preserveAspectRatio="xMidYMid meet"/>
+<text x="1198" y="275" text-anchor="middle" font-size="9"  font-weight="600" fill="#0369a1">AWS Bedrock</text>
+<text x="1198" y="287" text-anchor="middle" font-size="8"  fill="#0284c7">Claude Haiku</text>
+
+<!-- ══════════════════════════════════════════
+     LAYER 2 CARDS  cy=500
+══════════════════════════════════════════ -->
+
+<!-- ── 7 MongoDB  cx=1040 cy=500 ── -->
+<rect x="1008" y="462" width="64" height="76" rx="6" fill="#ffffff" stroke="#16a34a" stroke-width="1.5"/>
+<image href="https://raw.githubusercontent.com/gilbarbara/logos/master/logos/mongodb-icon.svg" x="1020" y="468" width="40" height="56" preserveAspectRatio="xMidYMid meet"/>
+<text x="1040" y="556" text-anchor="middle" font-size="9"  font-weight="600" fill="#15803d">MongoDB</text>
+<text x="1040" y="568" text-anchor="middle" font-size="8"  fill="#16a34a">Atlas</text>
+
+<!-- ── 8 Lambda API  cx=820 cy=500 ── -->
+<rect x="788" y="468" width="64" height="64" rx="6" fill="#ffffff" stroke="#ea580c" stroke-width="1.2"/>
+<image href="https://raw.githubusercontent.com/gilbarbara/logos/master/logos/aws-lambda.svg" x="788" y="468" width="64" height="64" preserveAspectRatio="xMidYMid meet"/>
+<text x="820" y="550" text-anchor="middle" font-size="9"  font-weight="600" fill="#9a3412">Lambda API</text>
+
+<!-- ── 9 API Gateway  cx=600 cy=500 ── -->
+<rect x="568" y="468" width="64" height="64" rx="6" fill="#ffffff" stroke="#7c3aed" stroke-width="1.2"/>
+<image href="https://raw.githubusercontent.com/gilbarbara/logos/master/logos/aws-api-gateway.svg" x="568" y="468" width="64" height="64" preserveAspectRatio="xMidYMid meet"/>
+<text x="600" y="550" text-anchor="middle" font-size="9"  font-weight="600" fill="#6d28d9">API Gateway</text>
+
+<!-- ── 10 Cognito  cx=380 cy=500 ── -->
+<rect x="348" y="468" width="64" height="64" rx="6" fill="#ffffff" stroke="#BF2E7E" stroke-width="1.2"/>
+<image href="https://raw.githubusercontent.com/gilbarbara/logos/master/logos/aws-cognito.svg" x="348" y="468" width="64" height="64" preserveAspectRatio="xMidYMid meet"/>
+<text x="380" y="550" text-anchor="middle" font-size="9"  font-weight="600" fill="#8F1C5C">Cognito</text>
+
+<!-- ══════════════════════════════════════════
+     LAYER 3 CARDS  cy=700
+══════════════════════════════════════════ -->
+
+<!-- ── User ── -->
+<circle cx="148" cy="700" r="30" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+<circle cx="148" cy="690" r="11" fill="#64748b"/>
+<path   d="M128 718 Q128 706 148 706 Q168 706 168 718Z" fill="#94a3b8"/>
+<text x="148" y="745" text-anchor="middle" font-size="9" font-weight="600" fill="#475569">Utente</text>
+
+<!-- ── 11 Flutter  cx=400 cy=700 ── -->
+<rect x="368" y="668" width="64" height="64" rx="6" fill="#ffffff" stroke="#0284c7" stroke-width="1.5"/>
+<image href="https://raw.githubusercontent.com/gilbarbara/logos/master/logos/flutter.svg" x="368" y="668" width="64" height="64" preserveAspectRatio="xMidYMid meet"/>
+<text x="400" y="748" text-anchor="middle" font-size="9"  font-weight="600" fill="#0369a1">Flutter</text>
+<text x="400" y="760" text-anchor="middle" font-size="8"  fill="#0284c7">iOS · Android</text>
+
+<!-- ── ted.com  cx=690 cy=700 (external) ── -->
+<rect x="645" y="671" width="90" height="58" rx="6" fill="#ffffff" stroke="#dc2626" stroke-width="1.2" stroke-dasharray="5,3"/>
+<image href="https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/TED_three_letter_logo.svg/960px-TED_three_letter_logo.svg.png" x="660" y="679" width="60" height="32" preserveAspectRatio="xMidYMid meet"/>
+<text x="690" y="712" text-anchor="middle" font-size="7.5" fill="#991b1b">ted.com + ?t=…</text>
+<text x="748" y="750" text-anchor="middle" font-size="8"  fill="#6b7280" font-style="italic">link esterno</text>
+
+<!-- ─────────────────── ARROWS ─────────────────── -->
+
+<!-- L1: CSV → S3 Raw -->
+<path d="M110 163 Q160 163 183 210" fill="none" stroke="#64748b" stroke-width="1.5" marker-end="url(#a0)"/>
+
+<!-- L1: λ Transcript → S3 Raw (dashed, external call) -->
+<path d="M110 318 Q160 318 183 240" fill="none" stroke="#ea580c" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#ao)"/>
+
+<!-- L1: S3 Raw → Glue -->
+<line x1="248" y1="225" x2="347" y2="225" stroke="#64748b" stroke-width="1.5" marker-end="url(#a0)"/>
+
+<!-- L1: Glue → S3 Processed -->
+<line x1="413" y1="225" x2="512" y2="225" stroke="#64748b" stroke-width="1.5" marker-end="url(#a0)"/>
+
+<!-- L1: S3 Processed → λ Dispatcher -->
+<line x1="578" y1="225" x2="677" y2="225" stroke="#64748b" stroke-width="1.5" marker-end="url(#a0)"/>
+
+<!-- L1: λ Dispatcher → SQS -->
+<line x1="743" y1="225" x2="842" y2="225" stroke="#ea580c" stroke-width="1.5" marker-end="url(#ao)"/>
+
+<!-- L1: SQS → Lambda AI -->
+<line x1="908" y1="225" x2="1007" y2="225" stroke="#ea580c" stroke-width="1.5" marker-end="url(#ao)"/>
+
+<!-- L1: Lambda AI ↔ Bedrock -->
+<line x1="1073" y1="218" x2="1157" y2="218" stroke="#0284c7" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#ab)"/>
+<line x1="1157" y1="232" x2="1073" y2="232" stroke="#0284c7" stroke-width="1"   stroke-dasharray="5,3" marker-end="url(#ab)" opacity="0.5"/>
+
+<!-- L1→L2: Lambda AI → MongoDB (crosses layer boundary) -->
+<line x1="1040" y1="258" x2="1040" y2="461" stroke="#16a34a" stroke-width="1.8" marker-end="url(#ag)"/>
+
+<!-- L2: MongoDB → Lambda API -->
+<line x1="1007" y1="500" x2="853"  y2="500" stroke="#16a34a" stroke-width="1.5" marker-end="url(#ag)"/>
+
+<!-- L2: Lambda API → API Gateway -->
+<line x1="787"  y1="500" x2="633"  y2="500" stroke="#ea580c" stroke-width="1.5" marker-end="url(#ao)"/>
+
+<!-- L2: API Gateway ↔ Cognito -->
+<line x1="567"  y1="495" x2="413"  y2="495" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#ap)"/>
+<line x1="413"  y1="505" x2="567"  y2="505" stroke="#7c3aed" stroke-width="1"   marker-end="url(#ap)" opacity="0.5"/>
+
+<!-- L2→L3: API Gateway → Flutter -->
+<path d="M600 533 Q560 600 432 667" fill="none" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#ap)"/>
+
+<!-- L2→L3: Cognito ↔ Flutter (auth) -->
+<path d="M380 533 Q380 600 400 667" fill="none" stroke="#BF2E7E" stroke-width="1.3" stroke-dasharray="5,3" marker-end="url(#ar)"/>
+
+<!-- L3: User → Flutter -->
+<line x1="179" y1="700" x2="367" y2="700" stroke="#64748b" stroke-width="1.5" marker-end="url(#a0)"/>
+
+<!-- L3: Flutter → ted.com -->
+<line x1="433" y1="700" x2="644" y2="700" stroke="#0284c7" stroke-width="1.3" stroke-dasharray="5,3" marker-end="url(#ab)"/>
+
+<!-- ─────────────────── SMALL LABELS ON KEY ARROWS ─────────────────── -->
+
+<!-- write bits label -->
+<rect x="1045" y="340" width="52" height="15" rx="3" fill="#ffffff" stroke="#16a34a" stroke-width="0.8"/>
+<text x="1071" y="351" text-anchor="middle" font-size="8" font-weight="600" fill="#15803d">write bits</text>
+
+<!-- AI calls label -->
+<rect x="1086" y="218" width="48" height="14" rx="3" fill="#ffffff" stroke="#0284c7" stroke-width="0.8"/>
+<text x="1110" y="228" text-anchor="middle" font-size="8" font-weight="600" fill="#0369a1">AI calls</text>
+
+<!-- auth label -->
+<rect x="344"  y="560" width="36" height="14" rx="3" fill="#ffffff" stroke="#BF2E7E" stroke-width="0.8"/>
+<text x="362"  y="570" text-anchor="middle" font-size="8" font-weight="600" fill="#8F1C5C">auth</text>
+
+<!-- ─────────────────── LEGEND ─────────────────── -->
+<rect x="10" y="814" width="1260" height="10" rx="3" fill="#f8fafc" stroke="#e5e7eb" stroke-width="0.5"/>
+
+<line x1="28"  y1="821" x2="50"  y2="821" stroke="#64748b" stroke-width="1.5" marker-end="url(#a0)"/>
+<text x="55"   y="825" font-size="8" fill="#475569">flusso dati</text>
+
+<line x1="140" y1="821" x2="162" y2="821" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#a0)"/>
+<text x="167"  y="825" font-size="8" fill="#475569">chiamata esterna / auth</text>
+
+<rect x="300"  y="817" width="10" height="8" rx="1.5" fill="none" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,2"/>
+<text x="315"  y="825" font-size="8" fill="#475569">servizio esterno</text>
+
+<circle cx="408" cy="821" r="4" fill="#ea580c"/>
+<text   x="416" y="825" font-size="8" fill="#475569">Lambda</text>
+
+<circle cx="475" cy="821" r="4" fill="#16a34a"/>
+<text   x="483" y="825" font-size="8" fill="#475569">S3 · MongoDB</text>
+
+<circle cx="560" cy="821" r="4" fill="#7c3aed"/>
+<text   x="568" y="825" font-size="8" fill="#475569">Glue</text>
+
+<circle cx="600" cy="821" r="4" fill="#e11d48"/>
+<text   x="608" y="825" font-size="8" fill="#475569">SQS</text>
+
+<circle cx="640" cy="821" r="4" fill="#0284c7"/>
+<text   x="648" y="825" font-size="8" fill="#475569">Bedrock</text>
+
+<circle cx="696" cy="821" r="4" fill="#7c3aed"/>
+<text   x="704" y="825" font-size="8" fill="#475569">API Gateway</text>
+
+<circle cx="770" cy="821" r="4" fill="#BF2E7E"/>
+<text   x="778" y="825" font-size="8" fill="#475569">Cognito</text>
+
+<circle cx="822" cy="821" r="4" fill="#0284c7"/>
+<text   x="830" y="825" font-size="8" fill="#475569">Flutter</text>
+
+</svg>
+</div>
+
+</body>
+</html>
