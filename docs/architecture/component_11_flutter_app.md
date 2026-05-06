@@ -12,9 +12,9 @@ Applicazione mobile cross-platform (iOS e Android). È il punto di contatto fina
 
 **Onboarding** — selezione degli interessi al primo accesso, dopo la registrazione. Usa i tag del dataset come opzioni.
 
-**Feed** — schermata principale. Lista di bits personalizzati per interessi: quote breve, argomento, speaker. Tap su un bit apre il dettaglio.
+**Feed** — schermata principale. Lista di snacks personalizzati per interessi: quote breve, argomento, speaker. Tap su un snacks apre il dettaglio.
 
-**Dettaglio bit** — quote completa, riassunto, link a ted.com con timestamp al punto esatto del video.
+**Dettaglio snack** — quote completa, riassunto, link a ted.com con timestamp al punto esatto del video.
 
 **Profilo / Impostazioni** — modifica degli interessi, logout.
 
@@ -24,4 +24,4 @@ Applicazione mobile cross-platform (iOS e Android). È il punto di contatto fina
 
 **Autenticazione:** delegata a Cognito (Componente 10) — email/password, Google, Apple.
 
-**Video:** nessun contenuto video ospitato internamente. L'app linka direttamente a ted.com con il parametro timestamp (`?t=<seconds>`), aprendo il video originale al punto esatto del bit selezionato.
+**Video:** nessun contenuto video ospitato internamente. L'app linka direttamente a ted.com con il parametro timestamp (`?t=<seconds>`), aprendo il video originale al punto esatto dello snack selezionato.

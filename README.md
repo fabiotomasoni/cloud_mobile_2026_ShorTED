@@ -8,7 +8,7 @@ ShorTED è un servizio che analizza i talk TED e li scompone in **contenuti snac
 
 L'architettura è divisa in tre layer con responsabilità distinte.
 
-**Layer 1 — Data Pipeline:** elaborazione batch dei dati, asincrona e schedulata. Trasforma il dataset grezzo TED in bits strutturati pronti per essere serviti.
+**Layer 1 — Data Pipeline:** elaborazione batch dei dati, asincrona e schedulata. Trasforma il dataset grezzo TED in snacks strutturati pronti per essere serviti.
 
 **Layer 2 — Backend API:** layer serverless real-time. Espone i dati agli utenti tramite API REST protette.
 
@@ -39,12 +39,14 @@ Al termine del job Glue, questa Lambda legge la lista dei documenti presenti in 
 ### 5.2 · Amazon SQS
 Coda di distribuzione del lavoro. Ogni messaggio rappresenta un talk da analizzare. Gestisce il parallelismo (più Lambda AI girano in contemporanea) e i retry automatici: se una Lambda fallisce su un talk specifico, il messaggio torna in coda senza impatto sugli altri.
 
-### 6 · Lambda AI Processing
-Viene triggerata da SQS per ogni talk. Legge il documento JSON da S3 processed, invia il transcript ad AWS Bedrock per la segmentazione tematica, riceve in risposta i segmenti strutturati, calcola i timestamp e costruisce i documenti definitivi. Scrive i risultati su MongoDB.
+### 6.1 · Lambda AI Processing
+Viene triggerata da SQS per ogni talk. Legge il documento JSON da S3 processed e coordina la fase AI che trasforma il transcript in contenuti brevi e strutturati. Calcola i timestamp, costruisce i documenti definitivi e scrive i risultati su MongoDB.
+
+### 6.2 · AI Snack Pipeline
+Sotto-componente logico della Lambda AI. Il transcript non viene elaborato con un unico prompt monolitico, ma tramite più passaggi specializzati: segmentazione tematica, generazione di quote e summary, tagging/ranking e fusione finale tramite Snack Mixer. L'output resta compatibile con gli `snacks` già previsti dal sistema.
 
 ### AWS Bedrock (dipendenza esterna)
-Usato dalla Lambda AI. Analizza il transcript e restituisce la segmentazione strutturata in JSON. 
-
+Usato dalla Lambda AI per eseguire la AI Snack Pipeline. Può usare lo stesso modello con prompt diversi oppure più modelli specializzati, a seconda del task da svolgere.
 ---
 
 ### 7 · MongoDB Atlas

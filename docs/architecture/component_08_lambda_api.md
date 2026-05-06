@@ -9,8 +9,8 @@ Layer serverless che espone i dati di MongoDB verso l'app Flutter. È il confine
 
 ## Funzioni (base)
 - `createUser` — crea il profilo utente al primo accesso con gli interessi selezionati
-- `getFeed` — restituisce bits filtrati per interessi dell'utente, esclusi i già visti
-- `markSeen` — registra la visualizzazione di un bit
+- `getFeed` — restituisce snacks filtrati per interessi dell'utente, esclusi i già visti
+- `markSeen` — registra la visualizzazione di un snacks
 - `getTags` — lista dei tag disponibili per l'onboarding
 - `updateInterests` — aggiorna gli interessi dell'utente
 
