@@ -31,3 +31,4 @@ shorted-raw/
 
 ## Note
 I transcript TED sono verbatim (non riassunti) e includono i timestamp di ogni cue in millisecondi. Questi timestamp sono il dato fondamentale per collegare ogni segmento analizzato al punto esatto del video originale.
+Ai fini dell'esecuzione del progetto e per seguire il corretto flusso del corso, i transcripts verranno scaricati tramite uno script locale one-time e non verranno aggiornati. La lambda function verrà implementata in seguito.
