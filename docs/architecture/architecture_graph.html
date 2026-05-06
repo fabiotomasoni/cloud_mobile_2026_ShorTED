@@ -131,16 +131,17 @@ svg { display: block; width: 100%; height: auto; }
 <image href="https://raw.githubusercontent.com/gilbarbara/logos/master/logos/aws-sqs.svg" x="843" y="193" width="64" height="64" preserveAspectRatio="xMidYMid meet"/>
 <text x="875" y="275" text-anchor="middle" font-size="9"  font-weight="600" fill="#be123c">Amazon SQS</text>
 
-<!-- ── 6 Lambda AI  cx=1040 cy=225 ── -->
+<!-- ── 6 Lambda AI Orchestrator  cx=1040 cy=225 ── -->
 <rect x="1008" y="193" width="64" height="64" rx="6" fill="#ffffff" stroke="#ea580c" stroke-width="1.5"/>
 <image href="https://raw.githubusercontent.com/gilbarbara/logos/master/logos/aws-lambda.svg" x="1008" y="193" width="64" height="64" preserveAspectRatio="xMidYMid meet"/>
-<text x="1040" y="275" text-anchor="middle" font-size="9"  font-weight="600" fill="#9a3412">Lambda AI</text>
+<text x="1040" y="275" text-anchor="middle" font-size="9"  font-weight="600" fill="#9a3412">AI Orchestrator</text>
+<text x="1040" y="287" text-anchor="middle" font-size="8"  fill="#c2410c">Snack Mixer</text>
 
 <!-- ── Bedrock  cx=1195 cy=225  (external, dashed) ── -->
 <rect x="1158" y="193" width="80" height="64" rx="6" fill="#ffffff" stroke="#0284c7" stroke-width="1.2" stroke-dasharray="5,3"/>
 <image href="https://unpkg.com/@lobehub/icons-static-svg@latest/icons/bedrock-color.svg" x="1166" y="201" width="64" height="48" preserveAspectRatio="xMidYMid meet"/>
-<text x="1198" y="275" text-anchor="middle" font-size="9"  font-weight="600" fill="#0369a1">AWS Bedrock</text>
-<text x="1198" y="287" text-anchor="middle" font-size="8"  fill="#0284c7">Claude Haiku</text>
+<text x="1198" y="275" text-anchor="middle" font-size="9"  font-weight="600" fill="#0369a1">Bedrock</text>
+<text x="1198" y="287" text-anchor="middle" font-size="8"  fill="#0284c7">Model Pool</text>
 
 <!-- ══════════════════════════════════════════
      LAYER 2 CARDS  cy=500
@@ -189,6 +190,39 @@ svg { display: block; width: 100%; height: auto; }
 <text x="690" y="712" text-anchor="middle" font-size="7.5" fill="#991b1b">ted.com + ?t=…</text>
 <text x="748" y="750" text-anchor="middle" font-size="8"  fill="#6b7280" font-style="italic">link esterno</text>
 
+
+<!-- ── AI multi-model snack preparation callout ── -->
+<rect x="915" y="302" width="333" height="96" rx="8" fill="#eff6ff" stroke="#0284c7" stroke-width="1" stroke-dasharray="4,3"/>
+<text x="1081" y="319" text-anchor="middle" font-size="8" font-weight="700" fill="#0369a1" letter-spacing="1.2">MULTI-MODEL AI PIPELINE</text>
+<text x="1081" y="331" text-anchor="middle" font-size="7" fill="#475569">più output AI vengono confrontati e fusi in snack finali</text>
+
+<!-- specialized model outputs -->
+<rect x="936" y="340" width="86" height="17" rx="4" fill="#ffffff" stroke="#38bdf8" stroke-width="0.9"/>
+<text x="979" y="352" text-anchor="middle" font-size="7" font-weight="600" fill="#075985">Segmenter · tempi</text>
+
+<rect x="936" y="362" width="86" height="17" rx="4" fill="#ffffff" stroke="#38bdf8" stroke-width="0.9"/>
+<text x="979" y="374" text-anchor="middle" font-size="7" font-weight="600" fill="#075985">Quote/Summary</text>
+
+<rect x="936" y="384" width="86" height="17" rx="4" fill="#ffffff" stroke="#38bdf8" stroke-width="0.9"/>
+<text x="979" y="396" text-anchor="middle" font-size="7" font-weight="600" fill="#075985">Tagger/Ranker</text>
+
+<circle cx="1084" cy="371" r="5" fill="#eff6ff" stroke="#0284c7" stroke-width="1"/>
+<text x="1084" y="374" text-anchor="middle" font-size="7" font-weight="700" fill="#0369a1">+</text>
+
+<rect x="1158" y="356" width="64" height="30" rx="5" fill="#fff7ed" stroke="#ea580c" stroke-width="1"/>
+<text x="1190" y="368" text-anchor="middle" font-size="7" font-weight="700" fill="#9a3412">Snack Mixer</text>
+<text x="1190" y="378" text-anchor="middle" font-size="6.5" fill="#c2410c">dedup + select</text>
+
+<!-- internal AI flow: model results converge, then the mixer prepares final snacks -->
+<path d="M1023 349 C1046 349 1060 362 1079 368" fill="none" stroke="#0284c7" stroke-width="1" marker-end="url(#ab)"/>
+<line x1="1023" y1="371" x2="1078" y2="371" stroke="#0284c7" stroke-width="1" marker-end="url(#ab)"/>
+<path d="M1023 393 C1046 393 1060 380 1079 374" fill="none" stroke="#0284c7" stroke-width="1" marker-end="url(#ab)"/>
+<line x1="1090" y1="371" x2="1157" y2="371" stroke="#ea580c" stroke-width="1" marker-end="url(#ao)"/>
+
+<!-- contextual pointers from Orchestrator and Bedrock into the detailed pipeline -->
+<path d="M1040 258 C1040 276 1048 287 1062 302" fill="none" stroke="#0284c7" stroke-width="1" stroke-dasharray="4,2" marker-end="url(#ab)"/>
+<path d="M1198 258 C1198 276 1188 289 1172 302" fill="none" stroke="#0284c7" stroke-width="1" stroke-dasharray="4,2" marker-end="url(#ab)" opacity="0.8"/>
+
 <!-- ─────────────────── ARROWS ─────────────────── -->
 
 <!-- L1: CSV → S3 Raw -->
@@ -216,8 +250,8 @@ svg { display: block; width: 100%; height: auto; }
 <line x1="1073" y1="218" x2="1157" y2="218" stroke="#0284c7" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#ab)"/>
 <line x1="1157" y1="232" x2="1073" y2="232" stroke="#0284c7" stroke-width="1"   stroke-dasharray="5,3" marker-end="url(#ab)" opacity="0.5"/>
 
-<!-- L1→L2: Lambda AI → MongoDB (crosses layer boundary) -->
-<line x1="1040" y1="258" x2="1040" y2="461" stroke="#16a34a" stroke-width="1.8" marker-end="url(#ag)"/>
+<!-- L1→L2: Snack Mixer → MongoDB (final curated snacks) -->
+<path d="M1190 386 C1190 410 1130 421 1074 430 C1048 439 1040 446 1040 461" fill="none" stroke="#16a34a" stroke-width="1.8" marker-end="url(#ag)"/>
 
 <!-- L2: MongoDB → Lambda API -->
 <line x1="1007" y1="500" x2="853"  y2="500" stroke="#16a34a" stroke-width="1.5" marker-end="url(#ag)"/>
@@ -243,13 +277,13 @@ svg { display: block; width: 100%; height: auto; }
 
 <!-- ─────────────────── SMALL LABELS ON KEY ARROWS ─────────────────── -->
 
-<!-- write bits label -->
-<rect x="1045" y="340" width="52" height="15" rx="3" fill="#ffffff" stroke="#16a34a" stroke-width="0.8"/>
-<text x="1071" y="351" text-anchor="middle" font-size="8" font-weight="600" fill="#15803d">write bits</text>
+<!-- snack output label -->
+<rect x="1114" y="410" width="70" height="15" rx="3" fill="#ffffff" stroke="#16a34a" stroke-width="0.8"/>
+<text x="1149" y="421" text-anchor="middle" font-size="8" font-weight="600" fill="#15803d">snack finali</text>
 
 <!-- AI calls label -->
-<rect x="1086" y="218" width="48" height="14" rx="3" fill="#ffffff" stroke="#0284c7" stroke-width="0.8"/>
-<text x="1110" y="228" text-anchor="middle" font-size="8" font-weight="600" fill="#0369a1">AI calls</text>
+<rect x="1086" y="218" width="50" height="14" rx="3" fill="#ffffff" stroke="#0284c7" stroke-width="0.8"/>
+<text x="1111" y="228" text-anchor="middle" font-size="8" font-weight="600" fill="#0369a1">AI calls</text>
 
 <!-- auth label -->
 <rect x="344"  y="560" width="36" height="14" rx="3" fill="#ffffff" stroke="#BF2E7E" stroke-width="0.8"/>
