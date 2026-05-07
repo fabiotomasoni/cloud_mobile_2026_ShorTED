@@ -1,0 +1,42 @@
+{
+    "id": 1,
+    "title": "Example Transcript",
+    "slug": "example-transcript",
+    "url": "https://example.com/transcripts/example-transcript",
+    "duration": 3600,
+    "tags": ["example", "transcript"],
+    "related_videos": [2,3],
+    "presenterDisplayName": "John Doe",
+    "speakers": ["John Doe", "Jane Smith"],
+    "image": "https://example.com/image.jpg",
+    "transcriptions": {
+        "en": {
+            "language": "English",
+            "sentences": [
+                {
+                    "timestamp": "7000",
+                    "text": "This is the first sentence of the transcript."
+                },
+                {
+                    "timestamp": "15000",
+                    "text": "This is the second sentence of the transcript."
+                }
+            ], 
+            "raw": "This is the full transcript in English."
+        },
+        "it": {
+            "language": "Italian",
+            "sentences": [
+                {
+                    "timestamp": "7000",
+                    "text": "Questo è la prima frase della trascrizione."
+                },
+                {
+                    "timestamp": "15000",
+                    "text": "Questo è la seconda frase della trascrizione."
+                }
+            ],
+            "raw": "Questo è la trascrizione completa in italiano."
+        }
+    }
+}
