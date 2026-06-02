@@ -637,12 +637,18 @@ def run_ollama_orchestrator(ctx: dict) -> dict:
         )},
     ]
     tools_used = []
+    in_tokens = 0
+    out_tokens = 0
 
     logger.info("Starting Ollama tool-use loop (model: %s)", OLLAMA_MODEL)
 
     for loop_idx in range(MAX_TOOL_LOOPS):
         logger.info("  Loop iteration %d/%d …", loop_idx + 1, MAX_TOOL_LOOPS)
         response = _ollama_chat(messages, tools=OLLAMA_TOOL_DEFINITIONS)
+        
+        in_tokens += response.get("prompt_eval_count", 0)
+        out_tokens += response.get("eval_count", 0)
+
         msg = response.get("message", {})
         role = msg.get("role", "assistant")
         content = msg.get("content") or ""
@@ -683,7 +689,14 @@ def run_ollama_orchestrator(ctx: dict) -> dict:
         if content:
             if "final_snacks" in content:
                 logger.info("  Model returned final response (loop %d)", loop_idx + 1)
-                return _parse_model_output(content, ctx, tools_used)
+                logger.info("  📊 Token usage (Ollama estimation): %d input, %d output", in_tokens, out_tokens)
+                parsed_data = _parse_model_output(content, ctx, tools_used)
+                parsed_data["processing_report"]["tokenUsage"] = {
+                    "inputTokens": in_tokens,
+                    "outputTokens": out_tokens,
+                    "totalTokens": in_tokens + out_tokens
+                }
+                return parsed_data
             else:
                 logger.warning("  Model returned text but no tool calls and no final_snacks. Prompting it to continue.")
                 messages.append({"role": "user", "content": "You didn't call any tool and didn't output the final JSON with 'final_snacks'. Please either call a tool or provide the final JSON output."})
