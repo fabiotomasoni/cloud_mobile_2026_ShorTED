@@ -1,0 +1,21 @@
+# ShorTED Lambda AI Orchestrator — Python dependencies
+#
+# Install locally:
+#   pip install -r requirements.txt
+#
+# For Lambda deployment:
+#   zip together handler.py and all .py files in this directory
+#   boto3 is pre-installed in Lambda runtime — no need to bundle it
+#   All other packages must be bundled or added as a Lambda Layer
+
+# AWS SDK (pre-installed in Lambda runtime, needed locally)
+boto3>=1.35.0
+
+# MongoDB driver (sync — suitable for Lambda)
+pymongo>=4.9.0
+
+# Environment variable loading (local development only)
+python-dotenv>=1.0.0
+
+# HTTP client for MCP server calls
+requests>=2.32.0
