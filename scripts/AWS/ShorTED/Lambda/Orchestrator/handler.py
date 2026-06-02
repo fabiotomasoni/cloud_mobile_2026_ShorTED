@@ -45,7 +45,7 @@ from s3_processed_reader import read_processed_json
 from ai_context_builder import build_ai_context
 from source_hash import compute_source_hash
 from mongo_repository import MongoRepository
-from bedrock_orchestrator_client import invoke_bedrock_orchestrator
+from ai_orchestrator_client import invoke_ai_orchestrator
 from final_validator import validate_ai_result
 from persistence import save_talk_and_replace_snacks
 
@@ -119,8 +119,8 @@ def handler(event, context):
                 _log_event("lock_skip", slug, language, reason="active_lock")
                 continue  # silent skip — another Lambda is processing this talk
 
-            # ── Step 7: Invoke Bedrock + MCP ──────────────────────────────
-            ai_result = invoke_bedrock_orchestrator(
+            # ── Step 7: Invoke AI provider + MCP ──────────────────────────
+            ai_result = invoke_ai_orchestrator(
                 ai_ctx=ai_ctx,
                 mcp_server_url=MCP_SERVER_URL,
                 pipeline_version=PIPELINE_VERSION,

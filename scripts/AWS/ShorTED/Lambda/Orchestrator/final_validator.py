@@ -26,11 +26,10 @@ from config import MIN_SNACKS, MAX_SNACKS, MIN_TAGS, MAX_TAGS
 
 logger = logging.getLogger(__name__)
 
-# Required string fields for every snack
+# Required string fields for every snack.
 _REQUIRED_STR_FIELDS = [
-    "segmentId", "talkId", "talkSlug", "speaker", "talkTitle",
+    "segment_id", "talk_id", "talk_slug", "speaker", "talk_title",
     "topic", "quote", "motivationalText", "aphorism", "talk_url", "language",
-    "tags", "score", "startTime", "endTime"
 ]
 
 
@@ -106,6 +105,8 @@ def validate_ai_result(ai_result: AIResult, ai_ctx: AIContext) -> None:
             errors.append(
                 f"{prefix}: tags count {len(s.tags)} not in [{MIN_TAGS}, {MAX_TAGS}]"
             )
+        elif any(not isinstance(tag, str) or not tag.strip() for tag in s.tags):
+            errors.append(f"{prefix}: tags must be non-empty strings")
 
         # 9. segmentId uniqueness
         sid = s.segment_id

@@ -26,12 +26,27 @@ Tools exposed to the AI model:
 import json
 import logging
 import os
+import asyncio
+import base64
 from urllib.parse import urlparse, urlencode, urlunparse, parse_qs
 
 from mcp.server.fastmcp import FastMCP
 
 from config import SERVER_PORT
 from mongo_client import talks, snacks
+from schemas import SNACK_SCHEMA
+from config import (
+    MIN_SNACKS,
+    MAX_SNACKS,
+    MIN_SEGMENT_DURATION,
+    MAX_SEGMENT_DURATION,
+    MIN_DISTANCE_SECONDS,
+    MAX_QUOTE_CHARS,
+    MAX_MOTIVATIONAL_CHARS,
+    MAX_APHORISM_CHARS,
+    MIN_TAGS,
+    MAX_TAGS,
+)
 from validation import validate_single, validate_batch, validate_final_set
 from duplicate_detection import find_intra_batch_duplicates, find_cross_db_duplicates
 from tag_utils import normalize_tags
@@ -46,6 +61,45 @@ mcp = FastMCP("shorted-mcp-server")
 
 
 # ── TOOLS ─────────────────────────────────────────────────────────────────────
+
+@mcp.tool()
+async def get_snack_schema() -> dict:
+    """Return the canonical ShorTED snack schema."""
+    return SNACK_SCHEMA
+
+
+@mcp.tool()
+async def get_mixer_rules() -> dict:
+    """Return numeric rules governing snack count, duration, spacing and lengths."""
+    return {
+        "minSnacks": MIN_SNACKS,
+        "maxSnacks": MAX_SNACKS,
+        "minSegmentDurationSeconds": MIN_SEGMENT_DURATION,
+        "maxSegmentDurationSeconds": MAX_SEGMENT_DURATION,
+        "minDistanceBetweenSnacksSeconds": MIN_DISTANCE_SECONDS,
+        "maxQuoteChars": MAX_QUOTE_CHARS,
+        "maxMotivationalChars": MAX_MOTIVATIONAL_CHARS,
+        "maxAphorismChars": MAX_APHORISM_CHARS,
+        "minTags": MIN_TAGS,
+        "maxTags": MAX_TAGS,
+    }
+
+
+@mcp.tool()
+async def get_grounding_rules() -> str:
+    """Return quality and grounding rules for generated snacks."""
+    return (
+        "1. Quotes must be exact or near-exact excerpts from the transcript. "
+        "Do not paraphrase or invent quotes.\n"
+        "2. Do not introduce facts, names, dates, or claims not present in the transcript.\n"
+        "3. Motivational text must be inspiring, directly grounded in the quote and topic, "
+        "and must not be a summary or clickbait.\n"
+        "4. Aphorisms must be short, punchy, standalone phrases.\n"
+        "5. Topics must be specific and descriptive, not generic labels.\n"
+        "6. Prefer self-contained segments that make sense without the rest of the talk.\n"
+        "7. All generated fields must match the transcript language."
+    )
+
 
 @mcp.tool()
 async def get_processing_context(
@@ -207,6 +261,21 @@ async def build_talk_url(base_url: str, start_time: int) -> str:
     return urlunparse(parsed._replace(query=new_query))
 
 
+HTTP_TOOL_DISPATCH = {
+    "get_snack_schema": get_snack_schema,
+    "get_mixer_rules": get_mixer_rules,
+    "get_grounding_rules": get_grounding_rules,
+    "get_processing_context": get_processing_context,
+    "get_existing_snacks": get_existing_snacks,
+    "validate_snack_candidate": validate_snack_candidate,
+    "validate_snack_candidates": validate_snack_candidates,
+    "validate_final_snack_set": validate_final_snack_set,
+    "find_similar_snacks": find_similar_snacks,
+    "canonicalize_tags": canonicalize_tags,
+    "build_talk_url": build_talk_url,
+}
+
+
 # ── RESOURCES & PROMPTS ───────────────────────────────────────────────────────
 
 register_resources(mcp)
@@ -232,13 +301,95 @@ def lambda_handler(event, context):
     Uses Mangum to wrap the FastMCP ASGI app for Lambda.
     Install mangum in requirements.txt.
     """
+    direct_response = _handle_direct_jsonrpc_tool_call(event)
+    if direct_response is not None:
+        return direct_response
+
     try:
-                from mangum import Mangum
+        from mangum import Mangum
     except ImportError:
         return {
             "statusCode": 500,
             "body": json.dumps({"error": "mangum not installed — add to requirements.txt"}),
         }
 
-    handler = Mangum(mcp.streamable_http_app(), lifespan="off")
+    handler = Mangum(mcp.streamable_http_app(), lifespan="auto")
     return handler(event, context)
+
+
+def _handle_direct_jsonrpc_tool_call(event: dict) -> dict | None:
+    """
+    Handle the Orchestrator's lightweight JSON-RPC tools/call POST directly.
+
+    Full MCP clients can still use the FastMCP streamable_http app. The
+    Orchestrator only needs deterministic tool calls, so this avoids MCP
+    session-negotiation issues in Lambda Function URLs.
+    """
+    method = (
+        event.get("requestContext", {})
+        .get("http", {})
+        .get("method")
+        or event.get("httpMethod")
+        or ""
+    ).upper()
+    path = (
+        event.get("rawPath")
+        or event.get("path")
+        or event.get("requestContext", {}).get("http", {}).get("path")
+        or ""
+    ).rstrip("/")
+
+    if method != "POST" or path != "/mcp":
+        return None
+
+    try:
+        body = event.get("body") or "{}"
+        if event.get("isBase64Encoded"):
+            body = base64.b64decode(body).decode("utf-8")
+        payload = json.loads(body)
+        if payload.get("method") != "tools/call":
+            return None
+
+        params = payload.get("params") or {}
+        tool_name = params.get("name")
+        arguments = params.get("arguments") or {}
+
+        if tool_name not in HTTP_TOOL_DISPATCH:
+            return _jsonrpc_response(payload.get("id"), error={
+                "code": -32601,
+                "message": f"Unknown tool: {tool_name}",
+            })
+
+        result = asyncio.run(_call_dispatched_tool(tool_name, arguments))
+        return _jsonrpc_response(payload.get("id"), result={
+            "content": [{
+                "type": "text",
+                "text": json.dumps(result, ensure_ascii=False, default=str),
+            }]
+        })
+    except Exception as e:
+        logger.exception("Direct JSON-RPC MCP tool call failed")
+        return _jsonrpc_response(None, error={
+            "code": -32603,
+            "message": str(e),
+        })
+
+
+async def _call_dispatched_tool(tool_name: str, arguments: dict):
+    tool = HTTP_TOOL_DISPATCH[tool_name]
+    return await tool(**arguments)
+
+
+def _jsonrpc_response(request_id, result=None, error=None) -> dict:
+    body = {"jsonrpc": "2.0", "id": request_id}
+    status_code = 200
+    if error is not None:
+        body["error"] = error
+        status_code = 400 if error.get("code") != -32603 else 500
+    else:
+        body["result"] = result
+    return {
+        "statusCode": status_code,
+        "headers": {"Content-Type": "application/json"},
+        "body": json.dumps(body, ensure_ascii=False, default=str),
+    }

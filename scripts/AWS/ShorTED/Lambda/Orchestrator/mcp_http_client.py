@@ -22,10 +22,49 @@ from errors import MCPServerError
 
 logger = logging.getLogger(__name__)
 
-# Static Bedrock tool definitions matching the MCP server tools.
+# Static tool definitions matching the MCP server tools.
 # Bedrock toolConfig expects ToolSpec with name, description, inputSchema.
 # These must match the actual tools in shorted_mcp_server.py.
 BEDROCK_TOOL_DEFINITIONS: list[dict] = [
+    {
+        "toolSpec": {
+            "name": "get_snack_schema",
+            "description": "Return the canonical ShorTED snack schema.",
+            "inputSchema": {
+                "json": {
+                    "type": "object",
+                    "properties": {},
+                    "required": [],
+                }
+            },
+        }
+    },
+    {
+        "toolSpec": {
+            "name": "get_mixer_rules",
+            "description": "Return numeric rules governing snack count, duration, spacing and field lengths.",
+            "inputSchema": {
+                "json": {
+                    "type": "object",
+                    "properties": {},
+                    "required": [],
+                }
+            },
+        }
+    },
+    {
+        "toolSpec": {
+            "name": "get_grounding_rules",
+            "description": "Return quality and grounding rules for generated snacks.",
+            "inputSchema": {
+                "json": {
+                    "type": "object",
+                    "properties": {},
+                    "required": [],
+                }
+            },
+        }
+    },
     {
         "toolSpec": {
             "name": "get_processing_context",
@@ -259,3 +298,34 @@ class MCPHttpClient:
     def get_tool_definitions() -> list[dict]:
         """Return the static Bedrock toolConfig tool definitions."""
         return BEDROCK_TOOL_DEFINITIONS
+
+    @staticmethod
+    def get_openai_tool_definitions() -> list[dict]:
+        """Return OpenAI Responses API function tool definitions."""
+        tools = []
+        for item in BEDROCK_TOOL_DEFINITIONS:
+            spec = item["toolSpec"]
+            tools.append({
+                "type": "function",
+                "name": spec["name"],
+                "description": spec["description"],
+                "parameters": spec["inputSchema"]["json"],
+                "strict": False,
+            })
+        return tools
+
+    @staticmethod
+    def get_ollama_tool_definitions() -> list[dict]:
+        """Return Ollama /api/chat function tool definitions."""
+        tools = []
+        for item in BEDROCK_TOOL_DEFINITIONS:
+            spec = item["toolSpec"]
+            tools.append({
+                "type": "function",
+                "function": {
+                    "name": spec["name"],
+                    "description": spec["description"],
+                    "parameters": spec["inputSchema"]["json"],
+                },
+            })
+        return tools

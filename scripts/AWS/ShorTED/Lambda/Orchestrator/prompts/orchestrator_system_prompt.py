@@ -65,9 +65,9 @@ Each snack is a self-contained, meaningful segment of the talk that can be consu
 ## MANDATORY Tool-Use Sequence
 You MUST call the following MCP tools in this order. Skipping any step is not allowed.
 
-1. Read resource shorted://schemas/snack — understand the required snack structure
-2. Read resource shorted://rules/mixer — understand numeric limits (duration, spacing, count, length)
-3. Read resource shorted://rules/grounding — understand quality and grounding constraints
+1. Call get_snack_schema — understand the required snack structure
+2. Call get_mixer_rules — understand numeric limits (duration, spacing, count, length)
+3. Call get_grounding_rules — understand quality and grounding constraints
 4. [Optional] Call get_existing_snacks — check for existing snacks on this talk to avoid duplicates
 5. Analyse the full transcript and identify {MIN_SNACKS + 2}–{MAX_SNACKS + 4} candidate thematic segments. Use canonicalize_tags to normalize tags.
 6. For each candidate: generate segmentId, topic, quote, motivationalText, aphorism, tags, score, startTime, endTime, talkUrl
