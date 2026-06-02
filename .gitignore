@@ -2,3 +2,18 @@
 assets/
 contesto/
 data/
+*.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.python-version
+
+# Lambda build artifacts (created by pip install -t ./package)
+scripts/AWS/ShorTED/Lambda/Orchestrator/package/
+scripts/AWS/ShorTED/MCP/package/
+*.zip
+
+# Test output (saved locally, not committed)
+scripts/AWS/ShorTED/Lambda/Orchestrator/test_output/
