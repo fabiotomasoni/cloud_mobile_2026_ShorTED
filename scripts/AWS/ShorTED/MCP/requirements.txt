@@ -1,0 +1,22 @@
+# ShorTED MCP Server — Python dependencies
+#
+# Install locally:
+#   pip install -r requirements.txt
+#
+# For Lambda Function URL deployment:
+#   bundle all these packages in the Lambda zip (none are pre-installed)
+
+# MCP framework (same as in tedx_server.py demo)
+mcp[cli]>=1.0.0
+
+# Async MongoDB driver for FastMCP event loop
+motor>=3.6.0
+
+# ASGI adapter for Lambda Function URL (production only)
+mangum>=0.17.0
+
+# HTTP server for local development
+uvicorn>=0.32.0
+
+# Environment variable loading (local development only)
+python-dotenv>=1.0.0
