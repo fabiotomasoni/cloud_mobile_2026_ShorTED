@@ -58,6 +58,27 @@ OPENAI_MAX_OUTPUT_TOKENS: int = int(os.environ.get("OPENAI_MAX_OUTPUT_TOKENS", "
 OLLAMA_BASE_URL: str = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434")
 OLLAMA_MODEL: str = os.environ.get("OLLAMA_MODEL", "llama3.1")
 OLLAMA_TIMEOUT_SECONDS: int = int(os.environ.get("OLLAMA_TIMEOUT_SECONDS", "180"))
+OLLAMA_EMPTY_CONTENT_REPROMPTS: int = int(os.environ.get("OLLAMA_EMPTY_CONTENT_REPROMPTS", "2"))
+
+
+# ── Local fast provider ───────────────────────────────────────────────────────
+# Separate high-throughput local/free-provider path. It intentionally does not
+# change the canonical bedrock/openai/ollama tool-loop providers.
+LOCAL_FAST_BACKENDS: list[str] = [
+    item.strip().lower()
+    for item in os.environ.get("LOCAL_FAST_BACKENDS", "freerouter,ollama").split(",")
+    if item.strip()
+]
+LOCAL_FAST_TIMEOUT_SECONDS: int = int(os.environ.get("LOCAL_FAST_TIMEOUT_SECONDS", "240"))
+LOCAL_FAST_MAX_REPAIR_ATTEMPTS: int = int(os.environ.get("LOCAL_FAST_MAX_REPAIR_ATTEMPTS", "1"))
+LOCAL_FAST_TRANSCRIPT_MAX_CHARS: int = int(os.environ.get("LOCAL_FAST_TRANSCRIPT_MAX_CHARS", "12000"))
+LOCAL_FAST_TEMPERATURE: float = float(os.environ.get("LOCAL_FAST_TEMPERATURE", "0.2"))
+LOCAL_FAST_MAX_TOKENS: int = int(os.environ.get("LOCAL_FAST_MAX_TOKENS", "5000"))
+
+# freeRouter exposes an OpenAI-compatible /v1/chat/completions endpoint.
+FREEROUTER_BASE_URL: str = os.environ.get("FREEROUTER_BASE_URL", "http://127.0.0.1:9000/v1")
+FREEROUTER_API_KEY: str = os.environ.get("FREEROUTER_API_KEY", "")
+FREEROUTER_MODEL: str = os.environ.get("FREEROUTER_MODEL", "groq/llama-3.1-8b-instant")
 
 
 # ── MCP Server ────────────────────────────────────────────────────────────────
@@ -71,6 +92,13 @@ MCP_TIMEOUT_SECONDS: int = int(os.environ.get("MCP_TIMEOUT_SECONDS", "30"))
 
 # ── Pipeline ──────────────────────────────────────────────────────────────────
 PIPELINE_VERSION: str = os.environ.get("PIPELINE_VERSION", "v1")
+
+# Default is idempotent skip: completed talks with same sourceHash and enough
+# snacks are not regenerated. Set true only for deliberate reprocessing runs.
+FORCE_REPROCESS_COMPLETED: bool = (
+    os.environ.get("FORCE_REPROCESS_COMPLETED", "false").lower()
+    in ("1", "true", "yes", "y")
+)
 
 # Default language when the SQS message does not specify one.
 # Falls back to "en" to maximise transcript coverage across the dataset.

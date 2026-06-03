@@ -225,9 +225,10 @@ class MCPHttpClient:
         self._session = requests.Session()
         self._session.headers.update({
             "Content-Type": "application/json",
-            "Accept": "application/json",
+            "Accept": "application/json, text/event-stream",
         })
         self._call_id = 0
+        self._session_id: str | None = None
 
     def call_tool(self, tool_name: str, tool_input: dict) -> Any:
         """
@@ -245,6 +246,7 @@ class MCPHttpClient:
         Raises:
             MCPServerError: On network error or non-2xx response
         """
+        self._ensure_initialized()
         self._call_id += 1
         payload = {
             "jsonrpc": "2.0",
@@ -258,26 +260,8 @@ class MCPHttpClient:
 
         logger.debug("MCP call: %s %s", tool_name, tool_input)
 
-        try:
-            response = self._session.post(
-                f"{self.base_url}/mcp",
-                json=payload,
-                timeout=self.timeout,
-            )
-            response.raise_for_status()
-        except requests.exceptions.Timeout:
-            raise MCPServerError(f"MCP tool '{tool_name}' timed out after {self.timeout}s")
-        except requests.exceptions.ConnectionError as e:
-            raise MCPServerError(f"Cannot connect to MCP server at {self.base_url}: {e}")
-        except requests.exceptions.HTTPError as e:
-            raise MCPServerError(
-                f"MCP server returned HTTP {response.status_code} for tool '{tool_name}': {e}"
-            )
-
-        try:
-            data = response.json()
-        except ValueError as e:
-            raise MCPServerError(f"MCP server returned non-JSON response for '{tool_name}': {e}")
+        response = self._post_json(payload, context=f"tool '{tool_name}'")
+        data = self._decode_json_rpc_response(response, context=f"tool '{tool_name}'")
 
         if "error" in data:
             raise MCPServerError(f"MCP tool '{tool_name}' error: {data['error']}")
@@ -293,6 +277,78 @@ class MCPHttpClient:
                 return text  # return as-is if not JSON
 
         return result
+
+    def _ensure_initialized(self) -> None:
+        """Initialise the FastMCP streamable HTTP session once per client."""
+        if self._session_id:
+            return
+
+        self._call_id += 1
+        payload = {
+            "jsonrpc": "2.0",
+            "method": "initialize",
+            "params": {
+                "protocolVersion": "2024-11-05",
+                "capabilities": {},
+                "clientInfo": {
+                    "name": "shorted-local-orchestrator",
+                    "version": "1.0",
+                },
+            },
+            "id": self._call_id,
+        }
+        response = self._post_json(payload, context="initialize")
+        session_id = response.headers.get("mcp-session-id")
+        if not session_id:
+            raise MCPServerError("MCP initialize response missing mcp-session-id header")
+        self._decode_json_rpc_response(response, context="initialize")
+        self._session_id = session_id
+        self._session.headers.update({"mcp-session-id": session_id})
+
+        notification = {
+            "jsonrpc": "2.0",
+            "method": "notifications/initialized",
+            "params": {},
+        }
+        self._post_json(notification, context="initialized notification")
+
+    def _post_json(self, payload: dict, context: str):
+        try:
+            response = self._session.post(
+                f"{self.base_url}/mcp",
+                json=payload,
+                timeout=self.timeout,
+            )
+            response.raise_for_status()
+            return response
+        except requests.exceptions.Timeout:
+            raise MCPServerError(f"MCP {context} timed out after {self.timeout}s")
+        except requests.exceptions.ConnectionError as e:
+            raise MCPServerError(f"Cannot connect to MCP server at {self.base_url}: {e}")
+        except requests.exceptions.HTTPError as e:
+            body = response.text[:1000] if "response" in locals() else ""
+            raise MCPServerError(
+                f"MCP server returned HTTP {response.status_code} for {context}: {e}. Body: {body}"
+            )
+
+    def _decode_json_rpc_response(self, response, context: str) -> dict:
+        content_type = response.headers.get("content-type", "")
+        try:
+            if "text/event-stream" in content_type:
+                return self._decode_sse_response(response.content.decode("utf-8"))
+            return response.json()
+        except ValueError as e:
+            raise MCPServerError(f"MCP server returned invalid response for {context}: {e}")
+
+    @staticmethod
+    def _decode_sse_response(text: str) -> dict:
+        data_lines: list[str] = []
+        for line in text.splitlines():
+            if line.startswith("data:"):
+                data_lines.append(line.removeprefix("data:").strip())
+        if not data_lines:
+            raise ValueError("SSE response had no data lines")
+        return json.loads("\n".join(data_lines))
 
     @staticmethod
     def get_tool_definitions() -> list[dict]:

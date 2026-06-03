@@ -29,6 +29,7 @@ from config import (
     LOCK_TTL_SECONDS,
     MIN_SNACKS,
     MAX_SNACKS,
+    FORCE_REPROCESS_COMPLETED,
     MCP_SERVER_URL,
     PIPELINE_VERSION,
 )
@@ -96,16 +97,19 @@ def handler(event, context):
             source_hash = compute_source_hash(ai_ctx)
 
             # ── Step 5: Pre-flight check — skip if already completed ───────
-            skip = _repo.should_skip_ai(
-                slug=slug,
-                language=language,
-                pipeline_version=PIPELINE_VERSION,
-                source_hash=source_hash,
-                min_snacks=MIN_SNACKS,
-            )
-            if skip.should_skip:
-                _log_event("skip", slug, language, reason=skip.reason)
-                continue  # message will be auto-deleted by SQS (no failure)
+            if FORCE_REPROCESS_COMPLETED:
+                _log_event("force_reprocess", slug, language, reason="flag_enabled")
+            else:
+                skip = _repo.should_skip_ai(
+                    slug=slug,
+                    language=language,
+                    pipeline_version=PIPELINE_VERSION,
+                    source_hash=source_hash,
+                    min_snacks=MIN_SNACKS,
+                )
+                if skip.should_skip:
+                    _log_event("skip", slug, language, reason=skip.reason)
+                    continue  # message will be auto-deleted by SQS (no failure)
 
             # ── Step 6: Acquire processing lock ───────────────────────────
             acquired = _repo.acquire_processing_lock(

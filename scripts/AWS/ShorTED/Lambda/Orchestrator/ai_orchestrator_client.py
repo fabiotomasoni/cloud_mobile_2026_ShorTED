@@ -5,6 +5,7 @@ Selects the model backend via AI_PROVIDER:
   - bedrock: existing AWS Bedrock Converse implementation
   - openai:  OpenAI Responses API with function calling
   - ollama:  Ollama /api/chat with native tool calls
+  - local_fast: separate high-throughput local/free path without MCP tool loop
 """
 import json
 import logging
@@ -19,6 +20,7 @@ from config import (
     MAX_TOOL_LOOPS,
     MCP_TIMEOUT_SECONDS,
     OLLAMA_BASE_URL,
+    OLLAMA_EMPTY_CONTENT_REPROMPTS,
     OLLAMA_MODEL,
     OLLAMA_TIMEOUT_SECONDS,
     OPENAI_BASE_URL,
@@ -35,6 +37,7 @@ from bedrock_orchestrator_client import (
     invoke_bedrock_orchestrator,
     _parse_ai_output,
 )
+from local_fast_orchestrator_client import invoke_local_fast_orchestrator
 
 logger = logging.getLogger(__name__)
 
@@ -52,8 +55,10 @@ def invoke_ai_orchestrator(
         return invoke_openai_orchestrator(ai_ctx, mcp_server_url, pipeline_version)
     if provider == "ollama":
         return invoke_ollama_orchestrator(ai_ctx, mcp_server_url, pipeline_version)
+    if provider == "local_fast":
+        return invoke_local_fast_orchestrator(ai_ctx, mcp_server_url, pipeline_version)
     raise AIOutputInvalidError(
-        f"Unsupported AI_PROVIDER={AI_PROVIDER!r}. Use one of: bedrock, openai, ollama."
+        f"Unsupported AI_PROVIDER={AI_PROVIDER!r}. Use one of: bedrock, openai, ollama, local_fast."
     )
 
 
@@ -180,6 +185,7 @@ def _run_ollama_tool_loop(
     tools_used: list[str],
 ) -> str:
     url = f"{OLLAMA_BASE_URL.rstrip('/')}/api/chat"
+    empty_content_reprompts = 0
 
     for loop_idx in range(MAX_TOOL_LOOPS):
         logger.info("Ollama loop iteration %d/%d", loop_idx + 1, MAX_TOOL_LOOPS)
@@ -208,6 +214,27 @@ def _run_ollama_tool_loop(
         content = message.get("content", "")
         if content:
             return content
+
+        if empty_content_reprompts < OLLAMA_EMPTY_CONTENT_REPROMPTS:
+            empty_content_reprompts += 1
+            logger.warning(
+                "Ollama returned empty content and no tool calls; requesting final JSON (%d/%d)",
+                empty_content_reprompts,
+                OLLAMA_EMPTY_CONTENT_REPROMPTS,
+            )
+            messages.append({
+                "role": "assistant",
+                "content": "",
+            })
+            messages.append({
+                "role": "user",
+                "content": (
+                    "You returned an empty assistant message. If no more tool calls are needed, "
+                    "return ONLY the final JSON object matching the required output schema. "
+                    "No markdown. No explanation. No hidden reasoning."
+                ),
+            })
+            continue
 
         raise AIOutputInvalidError(f"Ollama response had no final content and no tool calls: {data}")
 
