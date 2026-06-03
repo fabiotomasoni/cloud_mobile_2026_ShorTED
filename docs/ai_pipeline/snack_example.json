@@ -1,0 +1,27 @@
+{
+  "_id": "isabel_allende_tales_of_passion:en:v1:seg_007",
+  "segmentId": "seg_007",
+  "talkId": "10005",
+  "talkSlug": "isabel_allende_tales_of_passion",
+  "speaker": "Isabel Allende",
+  "talkTitle": "Tales of passion",
+  "topic": "The Value of a Passionate Heart in Service",
+  "quote": "Jenny has a brave and passionate heart. She murmurs a prayer and she goes ahead with the operation.",
+  "motivationalText": "Even when faced with lack of resources or professional limitations, a dedicated and passionate spirit can lead to meaningful action. The willingness to act despite fear is what matters most.",
+  "aphorism": "Passion drives action even without perfect preparation.",
+  "tags": [
+    "service",
+    "courage",
+    "dedication"
+  ],
+  "score": 0.85,
+  "startTime": 717,
+  "endTime": 721,
+  "talkUrl": "https://www.ted.com/talks/isabel_allende_tales_of_passion?t=717",
+  "language": "en",
+  "aiPipelineVersion": "v1",
+  "sourceHash": "c545a343bea7cde5c48910119799421913d34955c1dd506aa410bd8b86e8c93a",
+  "createdAt": {
+    "$date": "2026-06-03T01:06:54.957Z"
+  }
+}
