@@ -366,7 +366,7 @@ Script di integrazione completo che sostituisce tutti i servizi AWS con mock in-
 | S3 | JSON built-in (talk mock completo: 26 sentences, metadati reali) |
 | MongoDB | `_MockCollection` in-memory (supporta `$or`, `$in`, `$lt`, `$ne`, upsert) |
 | MCP Server | tools chiamati direttamente come funzioni Python (no HTTP) |
-| Bedrock | Ollama `/api/chat` con modello locale (es. `gemma4:e4b-mlx`) |
+| Bedrock | Ollama `/api/chat` con modello locale (es. `gemma4:12b-mlx`) |
 
 **Cosa verifica:**
 1. Build AI context e source hash
@@ -384,7 +384,7 @@ cd scripts/AWS/ShorTED/Lambda/Orchestrator
 python3 test_local_full.py
 ```
 
-> **Prerequisiti:** Ollama installato e attivo con `gemma4:e4b-mlx` (o altro modello con tool-use support).
+> **Prerequisiti:** Ollama installato e attivo con `gemma4:12b-mlx` (o altro modello con tool-use support).
 
 **Output:** salvato in `test_output/` (gitignored) — vedi sezione successiva.
 

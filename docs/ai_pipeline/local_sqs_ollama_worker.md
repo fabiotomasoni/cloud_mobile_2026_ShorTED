@@ -25,7 +25,7 @@ FREEROUTER_BASE_URL=http://127.0.0.1:9000/v1
 FREEROUTER_API_KEY=
 FREEROUTER_MODEL=groq/llama-3.1-8b-instant
 OLLAMA_BASE_URL=http://localhost:11434
-OLLAMA_MODEL=gemma4:e4b-mlx
+OLLAMA_MODEL=gemma4:12b-mlx
 ```
 
 `local_fast` is separate from the canonical `bedrock`, `openai`, and `ollama`

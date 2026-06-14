@@ -7,7 +7,7 @@ Runs the complete pipeline end-to-end with:
   - Mock S3       → in-memory, reads processed_data_example.json from disk
   - Mock MongoDB  → in-memory Python dicts (no Atlas needed)
   - Mock MCP Server → called directly as Python functions (no HTTP server needed)
-  - Ollama AI     → gemma4:e4b-mlx via local HTTP API (replaces Bedrock)
+  - Ollama AI     → gemma4:12b-mlx via local HTTP API (replaces Bedrock)
   - Real validation, persistence logic, source hash, lock mechanism
 
 Usage:
@@ -54,7 +54,7 @@ _EXAMPLE_PATHS = [
 
 # ── Config ────────────────────────────────────────────────────────────────────
 OLLAMA_BASE_URL   = "http://localhost:11434"
-OLLAMA_MODEL      = "gemma4:e4b-mlx"
+OLLAMA_MODEL      = "gemma4:12b-mlx"
 PIPELINE_VERSION  = "v1"
 DEFAULT_LANGUAGE  = "en"
 MIN_SNACKS        = 4
