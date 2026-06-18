@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ShorTED - Feed</title>
+<script type="text/javascript" nonce="d580c8909c354135baf7cb4a48c" src="//local.adguard.org?ts=1781618612573&amp;type=content-script&amp;dmn=contribution.usercontent.google.com&amp;url=https%3A%2F%2Fcontribution.usercontent.google.com%2Fdownload%3Fc%3DCgthaWRhX2NvZGVmeBJ8Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpbCiVodG1sXzViZWIzMmI5NmFjMTRhZTE4YWEwMTJiMTY0MTQ0OTZlEgsSBxCC5ZnSwBIYAZIBJAoKcHJvamVjdF9pZBIWQhQxMzIwMzc5Nzg3NTM2MDMyODA2OA%26filename%3D%26opi%3D89354086&amp;app=com.apple.Safari&amp;css=3&amp;js=1&amp;rel=1&amp;rji=1&amp;sbe=1"></script><script type="text/javascript" nonce="d580c8909c354135baf7cb4a48c" src="//local.adguard.org?ts=1781618612573&amp;name=AdGuard%20Extra&amp;type=user-script"></script><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-lowest": "#0e0e0e",
+                        "on-surface-variant": "#e7bdb7",
+                        "on-primary": "#690001",
+                        "on-secondary-fixed-variant": "#474746",
+                        "secondary-fixed": "#e4e2e1",
+                        "surface-dim": "#131313",
+                        "on-tertiary": "#003256",
+                        "tertiary-fixed": "#d0e4ff",
+                        "inverse-primary": "#c00204",
+                        "surface-bright": "#393939",
+                        "outline": "#ad8882",
+                        "on-primary-fixed-variant": "#930001",
+                        "on-secondary": "#303030",
+                        "surface": "#131313",
+                        "surface-container-low": "#1c1b1b",
+                        "on-secondary-fixed": "#1b1c1c",
+                        "ted-black": "#000000",
+                        "glass-light": "rgba(255, 255, 255, 0.1)",
+                        "secondary-fixed-dim": "#c8c6c5",
+                        "tertiary": "#9bcbff",
+                        "on-tertiary-fixed": "#001d34",
+                        "on-error": "#690005",
+                        "secondary": "#c8c6c5",
+                        "inverse-surface": "#e5e2e1",
+                        "overlay-stroke": "rgba(255, 255, 255, 0.15)",
+                        "primary-fixed-dim": "#ffb4a8",
+                        "error": "#ffb4ab",
+                        "glass-dark": "rgba(0, 0, 0, 0.4)",
+                        "on-secondary-container": "#b6b5b4",
+                        "on-primary-container": "#5c0000",
+                        "on-surface": "#e5e2e1",
+                        "surface-container-high": "#2a2a2a",
+                        "surface-container": "#201f1f",
+                        "on-primary-fixed": "#410000",
+                        "primary": "#ffb4a8",
+                        "error-container": "#93000a",
+                        "on-tertiary-fixed-variant": "#004a7a",
+                        "tertiary-container": "#3896e3",
+                        "surface-container-highest": "#353534",
+                        "surface-tint": "#ffb4a8",
+                        "primary-fixed": "#ffdad5",
+                        "background": "#131313",
+                        "on-background": "#e5e2e1",
+                        "outline-variant": "#5d3f3b",
+                        "primary-container": "#ff5542",
+                        "on-tertiary-container": "#002c4b",
+                        "tertiary-fixed-dim": "#9bcbff",
+                        "surface-variant": "#353534",
+                        "inverse-on-surface": "#313030",
+                        "secondary-container": "#474746",
+                        "ted-white": "#FFFFFF",
+                        "on-error-container": "#ffdad6"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-gap": "12px",
+                        "safe-area-bottom": "34px",
+                        "base": "8px",
+                        "section-gap": "32px",
+                        "container-padding": "20px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "display-quote-mobile": ["Inter"],
+                        "display-quote": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "label-caps": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "display-quote-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "800" }],
+                        "display-quote": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "body-lg": ["18px", { "lineHeight": "26px", "fontWeight": "400" }],
+                        "headline-md": ["22px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-lg": ["28px", { "lineHeight": "34px", "fontWeight": "700" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            overscroll-behavior-y: none;
+        }
+        /* Custom scrollbar for webkit */
+        ::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+        }
+        .feed-container {
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            height: 100vh;
+        }
+        .feed-item {
+            scroll-snap-align: start;
+            height: 100vh;
+            position: relative;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .text-shadow-sm {
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md antialiased overflow-hidden selection:bg-primary selection:text-on-primary">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-gradient-to-b from-ted-black/60 to-transparent flex items-center justify-between px-container-padding h-16 w-full">
+<button aria-label="Menu" class="text-on-surface hover:opacity-80 tap-highlight-none active:scale-95 transition-transform">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">menu</span>
+</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-black text-primary tracking-tighter">ShorTED</h1>
+<button aria-label="Search" class="text-on-surface hover:opacity-80 tap-highlight-none active:scale-95 transition-transform">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">search</span>
+</button>
+</header>
+<!-- Main Feed Content -->
+<main class="feed-container relative z-0">
+<!-- Feed Item 1 -->
+<article class="feed-item w-full bg-surface-container-lowest relative flex flex-col justify-end">
+<!-- Video/Image Background -->
+<div class="absolute inset-0 w-full h-full">
+<img alt="Speaker on stage" class="w-full h-full object-cover" data-alt="A dynamic shot of a charismatic speaker on a softly illuminated stage, gesturing enthusiastically while discussing a complex concept. The scene is bathed in a deep cinematic mood with a subtle gradient of light mode energy, characterized by rich blacks and vibrant TED-red accents. The background features a large, blurred projection of abstract fluid data visualizations. The lighting is focused and dramatic, highlighting the speaker's expression and creating a sense of motion and intellectual stimulation. The overall aesthetic is sophisticated, energetic, and highly engaging." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBnIc9GBCO8TMAq6LWZow4JdX1oDdL5FXvRKRYRTtu5Iuk1T_eYgOWjget5-d_gnn_s-b5xI-y5CrOHKh_-CXLOJVhWVJfOnZ34FOPmweIAscUHiZQZqVwuCtQ5N6Lx2sR3kGkZNRvgM9Hi8yM4BoblHpDVSVwpzqS-mpmGw6smoe1qS5bCP1UPIaG5weJwk2vGCpQZfjNG98TGpqklRM6BycRk2DbNaJmmmOKzOxJRGc0gfySzjGEA_YIa6Su1FHrFqNd_zy16Rd-I"/>
+<!-- Bottom Mask for text readability -->
+<div class="absolute bottom-0 w-full h-[50%] bg-gradient-to-t from-ted-black/90 via-ted-black/40 to-transparent"></div>
+</div>
+<!-- Content Overlay -->
+<div class="relative z-10 px-container-padding pb-[100px] w-full max-w-md mx-auto flex flex-col gap-stack-gap">
+<!-- Aphorism / Quote -->
+<h2 class="font-display-quote-mobile text-display-quote-mobile text-ted-white text-shadow-sm mb-2">
+                    "Vulnerability is not winning or losing; it's having the courage to show up and be seen when we have no control over the outcome."
+                </h2>
+<!-- Expandable Metadata Card -->
+<div class="glass-panel rounded-xl p-4 flex flex-col gap-2 transition-all duration-300" id="meta-card-1">
+<div class="flex justify-between items-center cursor-pointer" onclick="toggleMetadata('meta-card-1')">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full overflow-hidden border border-overlay-stroke">
+<img alt="Speaker Avatar" class="w-full h-full object-cover" data-alt="A close-up portrait of a thoughtful, intellectual speaker with a warm, engaging expression. The lighting is soft and cinematic, highlighting subtle details against a deep, dark background. The mood is intimate and inspiring, perfectly suited for a high-end mobile interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAvBjoL2XGQBSrGP1fArXVtlFTRyVJZPJpAZ95FAhg3Rx9OcMdBMmTffTUGjGx8grsgmIF1-hOccOHRilfGBSmzu2KjkvSHy4ZvcbJfv77JLkJjvbKyedIW6jTefwKDc1wgRr-dq9GTGu_Ewx1jBbiNZrhFijltuUC_uZE-osVutAVprGRtN1WncfAjh47A82exPem2vQAxMokgTxBKpEcq9sSKFQHgMETSENu1XA3N6oLEGGxQkgI6tb694zjQ_79z_xLuiqnjKJgZ"/>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-ted-white text-[16px] leading-tight">Brené Brown</h3>
+<p class="font-body-md text-body-md text-on-surface-variant text-[14px]">The power of vulnerability</p>
+</div>
+</div>
+<button class="text-on-surface p-1 rounded-full bg-glass-light hover:bg-white/20 transition-colors">
+<span class="material-symbols-outlined text-[20px]">expand_more</span>
+</button>
+</div>
+<!-- Hidden details -->
+<div class="hidden-details hidden mt-2 text-on-surface font-body-md text-[14px] leading-relaxed">
+<p>Brené Brown studies human connection — our ability to empathize, belong, love. In a poignant, funny talk, she shares a deep insight from her research, one that sent her on a personal quest to know herself as well as to understand humanity.</p>
+<div class="flex flex-wrap gap-2 mt-3">
+<span class="px-3 py-1 rounded-full border border-primary/30 text-primary text-[12px] bg-primary/10">Psychology</span>
+<span class="px-3 py-1 rounded-full border border-primary/30 text-primary text-[12px] bg-primary/10">Culture</span>
+</div>
+</div>
+</div>
+<!-- Action Buttons (Right Side Vertical) -->
+<div class="absolute right-4 bottom-[120px] flex flex-col gap-4 items-center">
+<button class="flex flex-col items-center gap-1 group">
+<div class="w-12 h-12 rounded-full glass-panel flex items-center justify-center group-hover:bg-primary-container/20 transition-colors">
+<span class="material-symbols-outlined text-ted-white" style="font-variation-settings: 'FILL' 0;">favorite</span>
+</div>
+<span class="text-[12px] font-medium text-ted-white">124K</span>
+</button>
+<button class="flex flex-col items-center gap-1 group">
+<div class="w-12 h-12 rounded-full glass-panel flex items-center justify-center group-hover:bg-primary-container/20 transition-colors">
+<span class="material-symbols-outlined text-ted-white" style="font-variation-settings: 'FILL' 0;">bookmark</span>
+</div>
+<span class="text-[12px] font-medium text-ted-white">Save</span>
+</button>
+<button class="flex flex-col items-center gap-1 group">
+<div class="w-12 h-12 rounded-full glass-panel flex items-center justify-center group-hover:bg-primary-container/20 transition-colors">
+<span class="material-symbols-outlined text-ted-white" style="font-variation-settings: 'FILL' 0;">share</span>
+</div>
+<span class="text-[12px] font-medium text-ted-white">Share</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Feed Item 2 -->
+<article class="feed-item w-full bg-surface-container-lowest relative flex flex-col justify-end">
+<!-- Video/Image Background -->
+<div class="absolute inset-0 w-full h-full">
+<img alt="Technology visual" class="w-full h-full object-cover" data-alt="A futuristic, high-contrast visual representation of complex digital networks intersecting with organic human elements. The color palette features deep space blacks and stark whites, punctuated by glowing TED-red data streams. The lighting suggests a glowing screen illuminating a dark room, creating a highly immersive and intellectual mood. The overall aesthetic is sleek, modern, and aligned with cutting-edge technology discussions in a fluid glass UI context." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5AZCsz2TDJhSjL6oaocPAi0KnNK9aKkBMT0AZVl2T7IqVdNcgB1UOIZ2kSRhd6csW4RCLyJHX-TFcGEwBJtr1mlUtAHbrHPlm_XK5PBY0saZb65qnIByxRCITjU7e9oLy7-B1LZkPl7pjjj_fvCKEqyQxcStJL-DPefbaTdX5mGxfkYtkS2BMqN8BwSLNzVNJT1vFUV0rck9wuXJZOZYv26S-RvPxsKgfjwDh-h7nhqoCtznV9SmebF1ERypqOTMhnVNK5aP7kvq6"/>
+<div class="absolute bottom-0 w-full h-[50%] bg-gradient-to-t from-ted-black/90 via-ted-black/40 to-transparent"></div>
+</div>
+<!-- Content Overlay -->
+<div class="relative z-10 px-container-padding pb-[100px] w-full max-w-md mx-auto flex flex-col gap-stack-gap">
+<h2 class="font-display-quote-mobile text-display-quote-mobile text-ted-white text-shadow-sm mb-2">
+                    "AI is not going to replace humans, but humans with AI will replace humans without AI."
+                </h2>
+<!-- Expandable Metadata Card -->
+<div class="glass-panel rounded-xl p-4 flex flex-col gap-2 transition-all duration-300" id="meta-card-2">
+<div class="flex justify-between items-center cursor-pointer" onclick="toggleMetadata('meta-card-2')">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full overflow-hidden border border-overlay-stroke">
+<img alt="Speaker Avatar" class="w-full h-full object-cover" data-alt="A portrait of a male tech visionary speaker, looking directly at the camera with an expression of profound insight. The image uses dramatic, high-key lighting against a profound dark background, ensuring the subject pops out. The mood is serious, forward-looking, and intellectual, fitting a high-end mobile application aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDLTzlYF26g1h3uHJIaEJB3UHgkbp74YR2PwUrBvmbGCGvXiRahxPZVL5V2jZPDpwee6xU7m3X02mHwu9TpZqdk8vCmlgFg8EF7xGbg2Gv_UwmUXZbNoh0YP6TwN3_-UZPLS5DLHcQOXeXCvVQax57zt8JxdW7aXzBpuZMP251BovHoSzDvpJXPI-hCGaD__LC6NfYv6NV_b1E9718L-lvldGyWEfhkdlJgxUHgselB9g6Q4yFtbGwyzFxAFkhu-SW8N7Z-hAAhhK0l"/>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-ted-white text-[16px] leading-tight">Karim Lakhani</h3>
+<p class="font-body-md text-body-md text-on-surface-variant text-[14px]">The future of work</p>
+</div>
+</div>
+<button class="text-on-surface p-1 rounded-full bg-glass-light hover:bg-white/20 transition-colors">
+<span class="material-symbols-outlined text-[20px]">expand_more</span>
+</button>
+</div>
+<div class="hidden-details hidden mt-2 text-on-surface font-body-md text-[14px] leading-relaxed">
+<p>Exploring how artificial intelligence is reshaping the landscape of modern work and why adaptation is more crucial than ever in the digital age.</p>
+<div class="flex flex-wrap gap-2 mt-3">
+<span class="px-3 py-1 rounded-full border border-primary/30 text-primary text-[12px] bg-primary/10">Technology</span>
+<span class="px-3 py-1 rounded-full border border-primary/30 text-primary text-[12px] bg-primary/10">Future</span>
+</div>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="absolute right-4 bottom-[120px] flex flex-col gap-4 items-center">
+<button class="flex flex-col items-center gap-1 group">
+<div class="w-12 h-12 rounded-full glass-panel flex items-center justify-center group-hover:bg-primary-container/20 transition-colors">
+<span class="material-symbols-outlined text-ted-white" style="font-variation-settings: 'FILL' 0;">favorite</span>
+</div>
+<span class="text-[12px] font-medium text-ted-white">89K</span>
+</button>
+<button class="flex flex-col items-center gap-1 group">
+<div class="w-12 h-12 rounded-full glass-panel flex items-center justify-center group-hover:bg-primary-container/20 transition-colors">
+<span class="material-symbols-outlined text-ted-white" style="font-variation-settings: 'FILL' 0;">bookmark</span>
+</div>
+<span class="text-[12px] font-medium text-ted-white">Save</span>
+</button>
+<button class="flex flex-col items-center gap-1 group">
+<div class="w-12 h-12 rounded-full glass-panel flex items-center justify-center group-hover:bg-primary-container/20 transition-colors">
+<span class="material-symbols-outlined text-ted-white" style="font-variation-settings: 'FILL' 0;">share</span>
+</div>
+<span class="text-[12px] font-medium text-ted-white">Share</span>
+</button>
+</div>
+</div>
+</article>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-4 left-4 right-4 rounded-full z-50 bg-glass-dark dark:bg-glass-dark backdrop-blur-xl border border-overlay-stroke shadow-[0px_0px_8px_0px_rgba(255,85,66,0.3)] flex justify-around items-center h-16 w-full max-w-md mx-auto">
+<a class="flex flex-col items-center justify-center bg-primary text-on-primary rounded-full px-6 py-2 transition-all duration-300 scale-95 duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">movie</span>
+<span class="font-label-caps text-label-caps">Feed</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-6 py-2 hover:text-on-surface hover:bg-glass-light transition-colors rounded-full" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">person</span>
+<span class="font-label-caps text-label-caps mt-1">Profile</span>
+</a>
+</nav>
+<script>
+        function toggleMetadata(cardId) {
+            const card = document.getElementById(cardId);
+            const details = card.querySelector('.hidden-details');
+            const icon = card.querySelector('.material-symbols-outlined.text-\\[20px\\]');
+            
+            if (details.classList.contains('hidden')) {
+                details.classList.remove('hidden');
+                card.classList.add('bg-surface-container-high/80');
+                icon.textContent = 'expand_less';
+            } else {
+                details.classList.add('hidden');
+                card.classList.remove('bg-surface-container-high/80');
+                icon.textContent = 'expand_more';
+            }
+        }
+    </script>
+</body></html>

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ShorTED - Feed</title>
+<script type="text/javascript" nonce="d580c8909c354135baf7cb4a48c" src="//local.adguard.org?ts=1781618612573&amp;type=content-script&amp;dmn=contribution.usercontent.google.com&amp;url=https%3A%2F%2Fcontribution.usercontent.google.com%2Fdownload%3Fc%3DCgthaWRhX2NvZGVmeBJ8Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpbCiVodG1sX2U0OWJiZDIwZTc5MzRkNmVhMTZiNjY4NGQ2YjNjYjE0EgsSBxCC5ZnSwBIYAZIBJAoKcHJvamVjdF9pZBIWQhQxMzIwMzc5Nzg3NTM2MDMyODA2OA%26filename%3D%26opi%3D89354086&amp;app=com.apple.Safari&amp;css=3&amp;js=1&amp;rel=1&amp;rji=1&amp;sbe=1"></script><script type="text/javascript" nonce="d580c8909c354135baf7cb4a48c" src="//local.adguard.org?ts=1781618612573&amp;name=AdGuard%20Extra&amp;type=user-script"></script><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-lowest": "#0e0e0e",
+                        "on-surface-variant": "#e7bdb7",
+                        "on-primary": "#690001",
+                        "on-secondary-fixed-variant": "#474746",
+                        "secondary-fixed": "#e4e2e1",
+                        "surface-dim": "#131313",
+                        "on-tertiary": "#003256",
+                        "tertiary-fixed": "#d0e4ff",
+                        "inverse-primary": "#c00204",
+                        "surface-bright": "#393939",
+                        "outline": "#ad8882",
+                        "on-primary-fixed-variant": "#930001",
+                        "on-secondary": "#303030",
+                        "surface": "#131313",
+                        "surface-container-low": "#1c1b1b",
+                        "on-secondary-fixed": "#1b1c1c",
+                        "ted-black": "#000000",
+                        "glass-light": "rgba(255, 255, 255, 0.1)",
+                        "secondary-fixed-dim": "#c8c6c5",
+                        "tertiary": "#9bcbff",
+                        "on-tertiary-fixed": "#001d34",
+                        "on-error": "#690005",
+                        "secondary": "#c8c6c5",
+                        "inverse-surface": "#e5e2e1",
+                        "overlay-stroke": "rgba(255, 255, 255, 0.15)",
+                        "primary-fixed-dim": "#ffb4a8",
+                        "error": "#ffb4ab",
+                        "glass-dark": "rgba(0, 0, 0, 0.4)",
+                        "on-secondary-container": "#b6b5b4",
+                        "on-primary-container": "#5c0000",
+                        "on-surface": "#e5e2e1",
+                        "surface-container-high": "#2a2a2a",
+                        "surface-container": "#201f1f",
+                        "on-primary-fixed": "#410000",
+                        "primary": "#ffb4a8",
+                        "error-container": "#93000a",
+                        "on-tertiary-fixed-variant": "#004a7a",
+                        "tertiary-container": "#3896e3",
+                        "surface-container-highest": "#353534",
+                        "surface-tint": "#ffb4a8",
+                        "primary-fixed": "#ffdad5",
+                        "background": "#131313",
+                        "on-background": "#e5e2e1",
+                        "outline-variant": "#5d3f3b",
+                        "primary-container": "#ff5542",
+                        "on-tertiary-container": "#002c4b",
+                        "tertiary-fixed-dim": "#9bcbff",
+                        "surface-variant": "#353534",
+                        "inverse-on-surface": "#313030",
+                        "secondary-container": "#474746",
+                        "ted-white": "#FFFFFF",
+                        "on-error-container": "#ffdad6"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-gap": "12px",
+                        "safe-area-bottom": "34px",
+                        "base": "8px",
+                        "section-gap": "32px",
+                        "container-padding": "20px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "display-quote-mobile": ["Inter"],
+                        "display-quote": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "label-caps": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "display-quote-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "800" }],
+                        "display-quote": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "body-lg": ["18px", { "lineHeight": "26px", "fontWeight": "400" }],
+                        "headline-md": ["22px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-lg": ["28px", { "lineHeight": "34px", "fontWeight": "700" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .snap-y-mandatory { scroll-snap-type: y mandatory; }
+        .snap-always { scroll-snap-stop: always; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background h-screen w-screen overflow-hidden flex justify-center font-body-md text-body-md antialiased">
+<!-- Top App Bar -->
+<header class="fixed top-0 w-full z-50 bg-gradient-to-b from-ted-black/60 to-transparent flat no shadows">
+<div class="flex items-center justify-between px-container-padding h-16 w-full max-w-md mx-auto">
+<button aria-label="menu" class="text-primary dark:text-primary hover:opacity-80 tap-highlight-none active:scale-95 transition-transform">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">menu</span>
+</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-black text-primary tracking-tighter">ShorTED</h1>
+<button aria-label="search" class="text-primary dark:text-primary hover:opacity-80 tap-highlight-none active:scale-95 transition-transform">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">search</span>
+</button>
+</div>
+</header>
+<!-- Main Feed Container (Mobile constraint) -->
+<main class="w-full max-w-md h-full overflow-y-scroll snap-y-mandatory hide-scrollbar relative z-0 pb-[90px]">
+<!-- Snack 1 -->
+<article class="w-full h-full snap-start snap-always relative flex flex-col justify-end">
+<!-- Video Background Placeholder -->
+<div class="absolute inset-0 z-0 bg-surface-container-highest">
+<img alt="Speaker on stage" class="w-full h-full object-cover opacity-60" data-alt="A dynamic, wide-angle shot of a charismatic speaker on a softly lit, modern stage. The lighting is cinematic, casting a gentle glow on the speaker's face while leaving the background in deep, mysterious shadows. The aesthetic is sophisticated and intellectual, with a focus on human expression and subtle red lighting accents that hint at the brand identity. The atmosphere is captivating and thought-provoking." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBsWi0giTBynTNJXXKAun7C2YKJ3ekbE750VK0P3KlmuB3op-rJvGLTDirU_aWIPHbHcH6UPFs-JtwxAGC_SvgYkPK5Xhfsj_XPHs74F8WJUSMWKCPqTR7vJUiQX9vi_3WsGuWwDFCjOO-kEHk1pF7YMpeRgcaH4DoOlMal4ZkNZHH2xIHAI2NayFzH8H-8FntOBmvZ5pBk4v1mP6tFGpT3rN7tM0wDcX64GsQGm_Sd1mhBKPc5c9BXnamz_TIpxKaRhXSYLMSeDij-"/>
+<!-- Bottom gradient mask -->
+<div class="absolute bottom-0 w-full h-[40%] bg-gradient-to-t from-ted-black/80 to-transparent"></div>
+</div>
+<!-- Content Area -->
+<div class="relative z-10 px-container-padding pb-section-gap flex flex-col gap-stack-gap">
+<!-- Aphorism -->
+<h2 class="font-display-quote-mobile text-display-quote-mobile text-ted-white drop-shadow-md">
+                    "Vulnerability is not winning or losing; it's having the courage to show up when you can't control the outcome."
+                </h2>
+<!-- Metadata / Expandable Pane Trigger -->
+<div class="bg-glass-dark backdrop-blur-xl border border-overlay-stroke rounded-xl p-4 flex flex-col gap-2 mt-4 cursor-pointer hover:bg-glass-light transition-colors group">
+<div class="flex items-center justify-between">
+<div>
+<p class="font-headline-md text-headline-md text-on-surface">Brené Brown</p>
+<p class="font-body-md text-body-md text-on-surface-variant">The power of vulnerability</p>
+</div>
+<span class="material-symbols-outlined text-on-surface group-hover:text-primary transition-colors">expand_circle_up</span>
+</div>
+<!-- Action Row -->
+<div class="flex gap-4 mt-2">
+<button class="flex items-center gap-1 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 0;">favorite</span>
+<span class="font-label-caps text-label-caps">142K</span>
+</button>
+<button class="flex items-center gap-1 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 0;">bookmark</span>
+<span class="font-label-caps text-label-caps">Save</span>
+</button>
+<button class="flex items-center gap-1 text-on-surface-variant hover:text-primary transition-colors ml-auto">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 0;">share</span>
+</button>
+</div>
+</div>
+</div>
+</article>
+<!-- Snack 2 -->
+<article class="w-full h-full snap-start snap-always relative flex flex-col justify-end">
+<div class="absolute inset-0 z-0 bg-surface-container-highest">
+<img alt="Tech presentation" class="w-full h-full object-cover opacity-60" data-alt="A close-up view of hands typing vigorously on a sleek laptop keyboard in a dimly lit, high-tech environment. The screen emits a soft, ethereal blue light that contrasts with subtle, deep red ambient glows in the background. The visual style is modern, glass-like, and energetic, conveying a sense of intense focus and innovation. The setting feels like a late-night coding session at a cutting-edge tech conference." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFt9Zt1Vkw544jw-ma1_zrPztM7gpbDf4LWZ0Fat4oCNuasZjGAEE825yQqZbPik9Z5jfIeSGRab3E5XD3Xx86AlMjKxAUXkY3qxe3lxo17imm1PyxVXWs4Wfv-QQ1hPHrmXYWgogBE8e0JEJ30cLsWpB1frC5ic5WbdaA7X-mknlk75FKqC0wG8bSLSPnVybgTNanPqsv8ZIWsoCrGVdflqidfuw9HkCKL0-yReQLaZkSV-Pmlad6m95Ylrmrdv3roJX3jMXKXqbt"/>
+<div class="absolute bottom-0 w-full h-[40%] bg-gradient-to-t from-ted-black/80 to-transparent"></div>
+</div>
+<div class="relative z-10 px-container-padding pb-section-gap flex flex-col gap-stack-gap">
+<h2 class="font-display-quote-mobile text-display-quote-mobile text-ted-white drop-shadow-md">
+                    "The single biggest problem in communication is the illusion that it has taken place."
+                </h2>
+<div class="bg-glass-dark backdrop-blur-xl border border-overlay-stroke rounded-xl p-4 flex flex-col gap-2 mt-4 cursor-pointer hover:bg-glass-light transition-colors group">
+<div class="flex items-center justify-between">
+<div>
+<p class="font-headline-md text-headline-md text-on-surface">George Bernard Shaw</p>
+<p class="font-body-md text-body-md text-on-surface-variant">Effective Communication</p>
+</div>
+<span class="material-symbols-outlined text-on-surface group-hover:text-primary transition-colors">expand_circle_up</span>
+</div>
+<div class="flex gap-4 mt-2">
+<button class="flex items-center gap-1 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 0;">favorite</span>
+<span class="font-label-caps text-label-caps">89K</span>
+</button>
+<button class="flex items-center gap-1 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 0;">bookmark</span>
+<span class="font-label-caps text-label-caps">Save</span>
+</button>
+<button class="flex items-center gap-1 text-on-surface-variant hover:text-primary transition-colors ml-auto">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 0;">share</span>
+</button>
+</div>
+</div>
+</div>
+</article>
+</main>
+<!-- Bottom Nav Bar -->
+<nav class="fixed bottom-4 left-4 right-4 rounded-full z-50 bg-glass-dark dark:bg-glass-dark backdrop-blur-xl border border-overlay-stroke shadow-[0px_0px_8px_0px_rgba(255,85,66,0.3)] w-full max-w-md mx-auto h-16">
+<div class="flex justify-around items-center h-full w-full px-2">
+<!-- Active Tab: Feed -->
+<button aria-label="Feed" class="flex flex-col items-center justify-center bg-primary text-on-primary rounded-full px-6 py-2 transition-all duration-300 scale-95 hover:bg-glass-light transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">movie</span>
+<span class="font-label-caps text-label-caps mt-1">Feed</span>
+</button>
+<!-- Inactive Tab: Profile -->
+<button aria-label="Profile" class="flex flex-col items-center justify-center text-on-surface-variant px-6 py-2 hover:text-on-surface hover:bg-glass-light transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">person</span>
+<span class="font-label-caps text-label-caps mt-1">Profile</span>
+</button>
+</div>
+</nav>
+</body></html>
