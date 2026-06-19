@@ -2,7 +2,7 @@
 
 ## Funzione app
 
-ShorTED è un'applicazione multipiattaforma scritta in flutter che si interfaccia con l'infrastruttura costruita in AWS e MongoDB per funzioni e dati.
+ShorTED è un'applicazione multipiattaforma scritta con Flutter che si interfaccia con l'infrastruttura costruita in AWS e MongoDB per funzioni e dati.
 Il suo scopo è quello di mostrare brevi frasi e video motivazionali riassunti e recuperati dal sito web di TEDx Talks come snakcable content, in stile TikTok o Instagram Reels.
 
 ## Stile generale
