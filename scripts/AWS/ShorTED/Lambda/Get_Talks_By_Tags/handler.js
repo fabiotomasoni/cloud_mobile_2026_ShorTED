@@ -66,7 +66,7 @@ module.exports.get_by_tags = async (event, context, callback) => {
 
         // Query snacks containing any of the requested tags and project the specific fields
         const matchedSnacks = await snack.find({ tags: { $in: tags } })
-            .select('speaker talkTitle topic quote motivationalText aphorism tags endTime talkUrl')
+            .select('_id segmentId talkId talkSlug speaker talkTitle topic quote motivationalText aphorism tags score startTime endTime talkUrl language aiPipelineVersion sourceHash createdAt')
             .skip((doc_per_page * page) - doc_per_page)
             .limit(doc_per_page);
 
