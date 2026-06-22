@@ -6,10 +6,10 @@ Punto di ingresso unico per tutte le chiamate HTTP provenienti dall'app Flutter.
 ## Posizione nel pipeline
 - **Chiamato da:** Componente 11 (Flutter App)
 - **Instrada verso:** Componente 8 (Lambda API Functions)
-- **Delega autenticazione a:** Componente 10 (AWS Cognito)
+- **Delega autenticazione a:** Componente 10 (AWS Cognito) per gli endpoint protetti del target finale
 
 ## Cosa fa
-Espone gli endpoint REST dell'app, verifica l'autenticazione di ogni richiesta tramite Cognito, e la inoltra alla Lambda corrispondente. Gestisce HTTPS.
+Espone gli endpoint REST dell'app e inoltra ogni richiesta alla Lambda corrispondente. Gli endpoint V1 pubblici non richiedono autenticazione; nel target finale gli endpoint utente/feed protetti verranno validati tramite Cognito.
 
 ## Decisioni prese
 **Tool:** AWS API Gateway.

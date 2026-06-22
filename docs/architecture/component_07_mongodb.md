@@ -11,10 +11,10 @@ Database centrale di ShorTED. È il punto di connessione tra la pipeline di elab
 ## Collezioni
 
 **`talks`** — un documento per talk.
-Metadati del talk: titolo, speaker, durata, immagine, tags, URL originale ted.com.
+Metadati del talk: titolo, speaker, durata, immagine, tags, URL originale ted.com e campi media arricchiti.
 
 **`snacks`** — N documenti per talk (4-8).
-Unità fondamentale di contenuto: topic, quote, summary, tags, startTime, endTime e talkUrl con timestamp. Può includere anche uno `score` interno prodotto dalla AI Snack Pipeline, utile per ordinare o filtrare gli snack migliori. È la collezione più interrogata dall'app.
+Unità fondamentale di contenuto: topic, quote, motivational text, aphorism, tags, startTime, endTime, talkUrl con timestamp e campi media copiati dal talk enriched. È la collezione più interrogata dall'app.
 
 **`users`** — un documento per utente, creato al primo accesso.
 Interessi selezionati, lista dei snacks già visualizzati (per evitare ripetizioni nel feed).
@@ -34,7 +34,11 @@ Interessi selezionati, lista dei snacks già visualizzati (per evitare ripetizio
   "score": 0.87,
   "startTime": 120,
   "endTime": 165,
-  "talkUrl": "https://www.ted.com/talks/<slug>?t=120"
+  "talkUrl": "https://www.ted.com/talks/<slug>?t=120",
+  "embedUrl": "https://embed.ted.com/talks/<slug>",
+  "thumbnailUrlFullHd": "https://...jpg?w=1920&h=1080",
+  "hlsUrl": "https://hls.ted.com/.../manifest.m3u8",
+  "mp4Url": "https://py.tedcdn.com/...mp4"
 }
 
 ## Decisioni prese

@@ -63,6 +63,15 @@ Response `200 application/json`:
     "startTime": 211,
     "endTime": 218,
     "talkUrl": "https://www.ted.com/talks/billy_collins_two_poems_about_what_dogs_think_probably?t=211",
+    "embedUrl": "https://embed.ted.com/talks/billy_collins_two_poems_about_what_dogs_think_probably",
+    "thumbnailUrl": "https://pi.tedcdn.com/r/talkstar-photos.s3.amazonaws.com/uploads/example.jpg",
+    "thumbnailUrlHd": "https://pi.tedcdn.com/r/talkstar-photos.s3.amazonaws.com/uploads/example.jpg?w=1280&h=720",
+    "thumbnailUrlFullHd": "https://pi.tedcdn.com/r/talkstar-photos.s3.amazonaws.com/uploads/example.jpg?w=1920&h=1080",
+    "hlsUrl": "https://hls.ted.com/project_masters/1521/manifest.m3u8?intro_master_id=9294",
+    "mp4Url": "https://py.tedcdn.com/consus/projects/.../fallback-1200k.mp4",
+    "mediaExtractedAt": "2026-06-22T12:00:00.000Z",
+    "mediaExtractionVersion": "ted-media-enricher-v1",
+    "mediaExtractionStatus": "completed",
     "language": "en",
     "aiPipelineVersion": "v1",
     "sourceHash": "c21d01588e41cec118ede0c641489846394944dfecfb6b35de930555ef94f458",
@@ -105,6 +114,16 @@ Campi principali usati dalla V1:
 | `startTime` | number | Timestamp di inizio. |
 | `endTime` | number | Timestamp di fine. |
 | `talkUrl` | string | URL TED originale con timestamp. |
+| `embedUrl` | string | URL embed TED gia' calcolato dal backend. |
+| `thumbnailUrl` | string | Thumbnail TED originale. |
+| `thumbnailUrlHd` | string | Thumbnail normalizzata 1280x720. |
+| `thumbnailUrlFullHd` | string | Thumbnail normalizzata 1920x1080, preferita dal feed. |
+| `hlsUrl` | string | URL HLS reale, futuro player nativo. |
+| `mp4Url` | string | URL MP4 fallback, futuro player nativo. |
+| `mediaExtractedAt` | string | Timestamp extraction backend. |
+| `mediaExtractionVersion` | string | Versione Lambda media enrichment. |
+| `mediaExtractionStatus` | string | `completed` o `failed`. |
+| `mediaExtractionError` | string | Errore diagnostico se extraction fallisce. |
 | `language` | string | Lingua contenuto. |
 | `aiPipelineVersion` | string | Versione pipeline. |
 | `sourceHash` | string | Tracciabilita' dato sorgente. |
@@ -126,7 +145,8 @@ https://embed.ted.com/talks/isabel_allende_tales_of_passion?t=717
 
 Regola app:
 
-- Sostituire host `www.ted.com` con `embed.ted.com`.
+- Preferire `embedUrl` se presente.
+- Altrimenti sostituire host `www.ted.com` con `embed.ted.com`.
 - Conservare path e query string.
 - Se `talkUrl` non e' valido ma `talkSlug` e `startTime` sono presenti, costruire `https://embed.ted.com/talks/<talkSlug>?t=<startTime>`.
 

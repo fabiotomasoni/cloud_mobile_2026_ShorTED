@@ -1,69 +1,82 @@
 # ShorTED — Architettura del Servizio
 
-ShorTED è un servizio che analizza i talk TED e li scompone in **contenuti snackable**: segmenti di video e citazioni, con link diretti ai video originali TEDx. Gli utenti ricevono un feed personalizzato in base ai propri interessi, tramite un'app mobile Flutter.
+ShorTED è un servizio che analizza i talk TED e li trasforma in contenuti snackable: segmenti brevi, citazioni, aforismi e metadati video pronti per essere serviti via API a un'app Flutter.
+
+L'architettura documenta il target finale del sistema, mantenendo però allineati anche i componenti oggi già introdotti nella pipeline reale, come il media enrichment backend e il bucket enriched.
 
 ---
 
 ## I tre layer
 
-L'architettura è divisa in tre layer con responsabilità distinte.
+**Layer 1 — Data Pipeline**
+Elaborazione batch e asincrona: ingestion, ETL, media enrichment e generazione AI dei talk.
 
-**Layer 1 — Data Pipeline:** elaborazione batch dei dati, asincrona e schedulata. Trasforma il dataset grezzo TED in snacks strutturati pronti per essere serviti.
+**Layer 2 — Backend API**
+Layer serverless real-time che legge MongoDB ed espone endpoint REST verso l'app mobile.
 
-**Layer 2 — Backend API:** layer serverless real-time. Espone i dati agli utenti tramite API REST protette.
-
-**Layer 3 — Mobile:** app Flutter cross-platform (iOS e Android) che presenta il feed all'utente.
+**Layer 3 — Mobile**
+App Flutter cross-platform che presenta feed, dettaglio, player e profilo utente.
 
 ---
 
 ## Componenti e flusso
 
 ### 1a · CSV Dataset
-Il punto di partenza. Cinque file CSV forniti dal corso con metadati dei talk TED (titoli, speaker, descrizioni, tag, immagini, video correlati). Vengono caricati manualmente una sola volta sul bucket S3 raw come operazione di bootstrap.
+Cinque file CSV forniti dal corso con metadati TED/TEDx: titoli, speaker, descrizioni, tag, immagini e relazioni tra talk.
 
 ### 1b · Lambda Transcript Fetcher
-Una Lambda function che, dopo il caricamento dei CSV, scarica il transcript verbatim di ogni talk da ted.com — completo di timestamp in millisecondi per ogni cue — e lo salva su S3 raw come file JSON separato per talk. È il secondo flusso di ingestion raw, parallelo al caricamento dei CSV.
+Funzione di ingestion che scarica i transcript timestamped da TED e li salva su S3 raw come JSON separati per talk.
 
 ### 2 · Amazon S3 Raw (`shorted-raw`)
-Bucket di storage grezzo. Contiene i CSV originali e i transcript JSON scaricati dalla Lambda. Dati immutati, fonte di verità del sistema. Tutto il resto può essere ricalcolato ripartendo da qui.
+Bucket di storage grezzo. Contiene CSV originali e transcript JSON. È la fonte di verità ricalcolabile dell'intera pipeline.
 
 ### 3 · AWS Glue (PySpark ETL)
-Il primo componente attivo della pipeline. Legge i CSV e i transcript da S3 raw, unisce i dati dei cinque file in un unico documento per talk (join, aggregazione tag in array, selezione immagine, normalizzazione), e scrive un JSON arricchito per ogni talk su S3 processed. Non fa chiamate esterne — lavora solo su dati già presenti su S3.
+Legge i dati raw, unifica metadati e transcript e scrive un JSON processed per talk. Non fa chiamate esterne.
 
 ### 4 · Amazon S3 Processed (`shorted-processed`)
-Bucket dei dati trasformati. Contiene un JSON per talk con tutti i metadati unificati e il transcript allegato. Dati pronti per l'analisi AI. Separato da S3 raw per policy di accesso e ciclo di vita distinti.
+Bucket dei documenti JSON prodotti da Glue. Contiene i talk pronti per i passaggi successivi.
+
+### 4.1 · Lambda TED Media Enricher
+Legge i JSON processed, estrae dai payload TED i metadati media necessari all'app (`embedUrl`, thumbnail, `hlsUrl`, `mp4Url`) e scrive il risultato nel bucket enriched.
+
+### 4.2 · Amazon S3 Processed Enriched (`shorted-processed-enriched`)
+Bucket intermedio dei documenti processed arricchiti con metadati media. Diventa la sorgente dati per Dispatcher e Orchestrator AI.
 
 ### 5.1 · Lambda Dispatcher
-Al termine del job Glue, questa Lambda legge la lista dei documenti presenti in S3 processed e inserisce un messaggio SQS per ogni talk da processare. È il ponte tra lo storage e la coda di lavoro.
+Legge i JSON nel bucket enriched e inserisce un messaggio SQS per ogni talk da processare dalla pipeline AI.
 
 ### 5.2 · Amazon SQS
-Coda di distribuzione del lavoro. Ogni messaggio rappresenta un talk da analizzare. Gestisce il parallelismo (più Lambda AI girano in contemporanea) e i retry automatici: se una Lambda fallisce su un talk specifico, il messaggio torna in coda senza impatto sugli altri.
+Coda di distribuzione del lavoro AI. Ogni messaggio rappresenta un talk; la coda gestisce parallelismo, retry e isolamento degli errori.
 
-### 6.1 · Lambda AI Processing
-Viene triggerata da SQS per ogni talk. Legge il documento JSON da S3 processed e coordina la fase AI che trasforma il transcript in contenuti brevi e strutturati. Calcola i timestamp, costruisce i documenti definitivi e scrive i risultati su MongoDB.
+### 6.1 · Lambda AI Orchestrator
+Riceve i messaggi da SQS, legge il talk enriched da S3, esegue la pipeline AI tramite Bedrock + MCP e salva talks/snacks in MongoDB in modo idempotente.
 
 ### 6.2 · AI Snack Pipeline
-Sotto-componente logico della Lambda AI. Il transcript non viene elaborato con un unico prompt monolitico, ma tramite più passaggi specializzati: segmentazione tematica, generazione di quote e summary, tagging/ranking e fusione finale tramite Snack Mixer. L'output resta compatibile con gli `snacks` già previsti dal sistema.
+Pipeline logica multi-step: segmentazione, estrazione quote, generazione testi, tagging, ranking, deduplica e snack mixing finale.
 
 ### AWS Bedrock (dipendenza esterna)
-Usato dalla Lambda AI per eseguire la AI Snack Pipeline. Può usare lo stesso modello con prompt diversi oppure più modelli specializzati, a seconda del task da svolgere.
----
+Motore LLM della pipeline AI. Non viene usato per media extraction, che resta separata nella Lambda 4.1.
 
 ### 7 · MongoDB Atlas
-Database centrale del sistema — il punto di connessione tra pipeline e backend. La Lambda AI ci scrive i risultati, le Lambda API ci leggono per servire il feed.
+Database centrale del sistema. Contiene i documenti `talks`, `snacks` e, nel target finale, anche `users`.
 
 ### 8 · Lambda API Functions
-Layer serverless che espone i dati di MongoDB verso l'app. Un insieme di funzioni chiamate tramite API Gateway.
+Lambda applicative che espongono tag, snack e feed verso l'app. Oggi esistono endpoint V1 pubblici; nel target finale il layer include anche endpoint autenticati per profilo e feed personalizzato.
 
 ### 9 · API Gateway
-Punto di ingresso unico per tutte le chiamate HTTP dell'app. Riceve le richieste, verifica l'autenticazione tramite Cognito e le instrada alla Lambda corretta. Espone gli endpoint REST su HTTPS.
+Espone gli endpoint HTTP e instrada verso le Lambda API. Nel target finale gestisce anche endpoint protetti con Cognito.
 
 ### 10 · AWS Cognito
-Gestione completa dell'autenticazione utenti. Supporta registrazione e login con email/password, Google e Apple. Dopo il login emette un token JWT che l'app allega ad ogni richiesta — API Gateway lo verifica automaticamente prima di inoltrarla a Lambda. Usato anche direttamente da Flutter per le schermate di accesso.
-
----
+Componente di autenticazione del target finale: registrazione, login e JWT per API protette.
 
 ### 11 · Flutter App
-Applicazione mobile cross-platform (iOS e Android). Si autentica tramite Cognito, recupera il feed personalizzato tramite API Gateway, e mostra i contenuti all'utente.
+App mobile iOS/Android che mostra il feed, il dettaglio snack, il player e il profilo. Nel target finale usa Cognito; nella V1 attuale usa ancora profilo locale.
 
 ---
+
+## Documentazione correlata
+
+- Architettura per componenti: `docs/architecture/`
+- Pipeline AI e Lambda AI: `docs/ai_pipeline/`
+- Lambda non-AI: `docs/lambda_functions/`
+- App Flutter e contratto dati: `docs/app/`

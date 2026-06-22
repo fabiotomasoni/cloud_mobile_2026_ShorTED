@@ -69,7 +69,9 @@ diventa:
 https://embed.ted.com/talks/<slug>?t=<seconds>
 ```
 
-La V1 usa una WebView fullscreen integrata nella card del feed. L'autoplay e' l'obiettivo, ma puo' dipendere dalle policy della piattaforma e dell'embed TED. Se l'autoplay non parte, il video resta comunque fullscreen sullo sfondo e l'utente puo' avviarlo interagendo con l'embed, senza uscire dal contesto dell'app.
+La V1 mostra nella card feed la thumbnail del talk TED come sfondo non interattivo, senza player TED direttamente cliccabile e senza overlay play nativo dell'embed. La thumbnail viene recuperata tramite oEmbed TED, normalizzata a Full HD (`1920x1080`) e mantenuta in cache lato app durante la sessione.
+
+L'interazione video principale avviene tramite un pulsante play esplicito posizionato sotto il box descrizione/tag, vicino alla navbar. Quando l'utente preme play, l'app apre una schermata player fullscreen dedicata con l'embed TED senza overlay descrittivi. La schermata player prova ad avviare subito il video embedded tramite parametri autoplay e JavaScript post-load; se l'embed TED o la piattaforma bloccano l'avvio automatico, restano disponibili i controlli del player nella stessa schermata, senza aprire un browser esterno.
 
 ## Navigazione
 
@@ -101,6 +103,7 @@ Non vengono persistiti in V1:
 - Esclusione opzionale di snack gia' restituiti nella sessione.
 - Miglior controllo di paginazione/cursor.
 - Rivalutazione di Riverpod se il feed richiede cache condivisa, stato piu' complesso o piu' controller dipendenti dallo stesso stato.
+- Pipeline backend dedicata per recuperare thumbnail TED, salvarle/cacharle, generare resize multipli e scrivere nello snack finale URL espliciti per thumbnail e video embed.
 
 ### V2 Utenti Cloud
 

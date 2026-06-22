@@ -3,24 +3,24 @@
 ## Ruolo nel sistema
 Cuore analitico della pipeline. Trasforma un documento talk (metadati + transcript) in un insieme di "snacks" — i contenuti snackable che costituiscono il contenuto core di ShorTED.
 
-La Lambda AI mantiene la responsabilità di orchestrare il processo: riceve il messaggio da SQS, legge il talk da S3 processed, esegue la AI Snack Pipeline tramite Bedrock + MCP e salva il risultato finale su MongoDB in modo idempotente.
+La Lambda AI mantiene la responsabilità di orchestrare il processo: riceve il messaggio da SQS, legge il talk da S3 enriched, esegue la AI Snack Pipeline tramite Bedrock + MCP e salva il risultato finale su MongoDB in modo idempotente. Non chiama TED e non fa media extraction; propaga solo i campi media già presenti nel JSON enriched.
 
 ## Posizione nel pipeline
 - **Trigger da:** Componente 5.2 (SQS Queue) — una invocazione per talk
-- **Legge da:** Componente 4 (S3 Processed Bucket) — documento JSON del talk
+- **Legge da:** Componente 4.2 (S3 Processed Enriched Bucket) — documento JSON del talk
 - **Usa:** AWS Bedrock (Nova Lite) + MCP Server ShorTED per la generazione AI
 - **Scrive su:** Componente 7 (MongoDB) — collezioni `talks` e `snacks`
 
 ## Cosa fa
 Per ogni talk ricevuto dalla coda:
 1. Parsing del messaggio SQS (bucket + file_key + language opzionale)
-2. Lettura e validazione del JSON processed da S3
+2. Lettura e validazione del JSON enriched da S3
 3. Costruzione dell'`AIContext` — selezione lingua, estrazione sentences, source hash SHA-256
 4. Pre-flight check su MongoDB: skip se già completato con stesso hash e versione pipeline
 5. Acquisizione lock atomico: evita elaborazioni parallele dello stesso talk
 6. Invocazione Bedrock Converse (Nova Lite) in loop multi-turn con tool-use MCP
 7. Validazione deterministica dell'output AI prima del salvataggio
-8. Persistenza idempotente: delete-before-insert snacks + upsert talk
+8. Persistenza idempotente: delete-before-insert snacks + upsert talk, includendo i campi media ricevuti
 9. Mark completed e rilascio lock
 10. SQS partial batch response: solo i messaggi falliti tornano in coda
 

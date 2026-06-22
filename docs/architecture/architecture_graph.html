@@ -121,6 +121,18 @@ svg { display: block; width: 100%; height: auto; }
 <text x="545" y="275" text-anchor="middle" font-size="9"  font-weight="600" fill="#15803d">S3  Processed</text>
 <text x="545" y="287" text-anchor="middle" font-size="8"  fill="#16a34a">shorted-processed</text>
 
+<!-- ── 4.1 Lambda Media Enricher  cx=628 cy=116 ── -->
+<rect x="596" y="84" width="64" height="64" rx="6" fill="#ffffff" stroke="#ea580c" stroke-width="1.2"/>
+<image href="https://raw.githubusercontent.com/gilbarbara/logos/master/logos/aws-lambda.svg" x="596" y="84" width="64" height="64" preserveAspectRatio="xMidYMid meet"/>
+<text x="628" y="166" text-anchor="middle" font-size="9"  font-weight="600" fill="#9a3412">Media</text>
+<text x="628" y="178" text-anchor="middle" font-size="8"  fill="#c2410c">Enricher</text>
+
+<!-- ── 4.2 S3 Processed Enriched  cx=628 cy=334 ── -->
+<rect x="596" y="302" width="64" height="64" rx="6" fill="#ffffff" stroke="#16a34a" stroke-width="1.2"/>
+<image href="https://raw.githubusercontent.com/gilbarbara/logos/master/logos/aws-s3.svg" x="596" y="302" width="64" height="64" preserveAspectRatio="xMidYMid meet"/>
+<text x="628" y="384" text-anchor="middle" font-size="9"  font-weight="600" fill="#15803d">S3 Enriched</text>
+<text x="628" y="396" text-anchor="middle" font-size="8"  fill="#16a34a">processed-enriched</text>
+
 <!-- ── 5.1 Lambda Dispatcher  cx=710 cy=225 ── -->
 <rect x="678" y="193" width="64" height="64" rx="6" fill="#ffffff" stroke="#ea580c" stroke-width="1.2"/>
 <image href="https://raw.githubusercontent.com/gilbarbara/logos/master/logos/aws-lambda.svg" x="678" y="193" width="64" height="64" preserveAspectRatio="xMidYMid meet"/>
@@ -237,8 +249,10 @@ svg { display: block; width: 100%; height: auto; }
 <!-- L1: Glue → S3 Processed -->
 <line x1="413" y1="225" x2="512" y2="225" stroke="#64748b" stroke-width="1.5" marker-end="url(#a0)"/>
 
-<!-- L1: S3 Processed → λ Dispatcher -->
-<line x1="578" y1="225" x2="677" y2="225" stroke="#64748b" stroke-width="1.5" marker-end="url(#a0)"/>
+<!-- L1: S3 Processed → Media Enricher → S3 Enriched → λ Dispatcher -->
+<path d="M578 216 C600 200 614 176 624 149" fill="none" stroke="#64748b" stroke-width="1.5" marker-end="url(#a0)"/>
+<line x1="628" y1="149" x2="628" y2="301" stroke="#ea580c" stroke-width="1.5" marker-end="url(#ao)"/>
+<path d="M660 334 C694 320 700 284 704 258" fill="none" stroke="#16a34a" stroke-width="1.5" marker-end="url(#ag)"/>
 
 <!-- L1: λ Dispatcher → SQS -->
 <line x1="743" y1="225" x2="842" y2="225" stroke="#ea580c" stroke-width="1.5" marker-end="url(#ao)"/>

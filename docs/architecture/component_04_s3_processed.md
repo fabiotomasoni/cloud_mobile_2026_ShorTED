@@ -5,7 +5,7 @@ Layer di storage dei dati trasformati ("gold layer"). Riceve l'output di Glue e 
 
 ## Posizione nel pipeline
 - **Input da:** Componente 3 (AWS Glue ETL)
-- **Output verso:** Componente 5 (SQS + Lambda Dispatcher)
+- **Output verso:** Componente 4.1 (Lambda TED Media Enricher)
 
 ## Contenuto
 Un documento JSON per talk, prodotto da Glue, che unifica tutti i dati grezzi:
@@ -28,4 +28,4 @@ Un documento JSON per talk, prodotto da Glue, che unifica tutti i dati grezzi:
 **Formato:** JSON, un file per talk, identificato dallo slug.
 
 ## Note
-Il Componente 5 (SQS) include una Lambda dispatcher che, al termine del job Glue, legge la lista dei documenti presenti in questo bucket e popola la coda SQS per avviare il processing AI.
+Il Componente 4.1 arricchisce questi documenti con metadati media e li scrive nel Componente 4.2. Il Dispatcher legge dal bucket enriched, non direttamente da questo bucket, così Glue resta un ETL puro e riproducibile.

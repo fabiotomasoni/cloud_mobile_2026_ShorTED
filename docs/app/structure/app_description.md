@@ -106,7 +106,9 @@ diventa:
 https://embed.ted.com/talks/isabel_allende_tales_of_passion?t=717
 ```
 
-La V1 implementa il video tramite WebView integrata fullscreen. L'obiettivo e' autoplay, ma se le policy della piattaforma o dell'embed TED lo impediscono, l'utente deve poter avviare il video con interazione diretta dentro l'embed, senza apertura di player nativo esterno.
+La V1 non mostra piu' il player TED embedded direttamente come sfondo cliccabile della card feed. La card usa la thumbnail del talk TED come sfondo non interattivo, recuperata tramite oEmbed TED e normalizzata a Full HD (`1920x1080`), cosi' non compaiono controlli video giganti nel feed e non ci sono conflitti tra gesture del feed, overlay e player embedded.
+
+La card mostra un pulsante play sotto il box descrizione/tag, vicino alla navbar. Premendo play viene aperta una schermata player fullscreen dedicata, con l'embed TED senza overlay informativi. La schermata player tenta l'avvio immediato del video embedded tramite autoplay e JavaScript post-load; se la piattaforma o TED lo impediscono, l'utente usa comunque i controlli del player nella stessa schermata, restando dentro l'app e senza aprire un browser esterno.
 
 ## Ottimizzazione Feed
 

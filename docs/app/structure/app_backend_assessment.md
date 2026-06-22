@@ -51,6 +51,16 @@ Responsabilita':
 - evitare ripetizioni nella stessa sessione se viene passato un cursor o un elenco di ID gia' restituiti;
 - restituire una pagina pronta per il feed.
 
+La V1.1 dovrebbe anche spostare fuori dall'app la derivazione degli asset visuali. La pipeline/backend dovrebbe:
+
+- recuperare la thumbnail TED del talk;
+- salvarla o cacharla in storage controllato dal progetto;
+- generare resize multipli, ad esempio `560x316`, `1280x720`, `1920x1080`;
+- scrivere nello snack finale URL espliciti come `thumbnailUrl`, `thumbnailUrlHd`, `thumbnailUrlFullHd`;
+- scrivere anche `embedUrl` esplicito, invece di derivarlo in app da `talkUrl`.
+
+Questo riduce chiamate oEmbed lato client, migliora performance/cache e rende il contratto dati piu' stabile.
+
 Endpoint indicativo:
 
 ```text
