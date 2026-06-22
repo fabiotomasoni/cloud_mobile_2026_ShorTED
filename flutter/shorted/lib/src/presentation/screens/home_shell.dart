@@ -33,7 +33,10 @@ class _HomeShellState extends State<HomeShell> {
       body: IndexedStack(
         index: _index,
         children: [
-          FeedScreen(profile: widget.profile, feedService: widget.feedService),
+          FeedScreen(
+            profile: widget.profile,
+            feedService: widget.feedService,
+          ),
           ProfileScreen(
             profile: widget.profile,
             profileService: widget.profileService,

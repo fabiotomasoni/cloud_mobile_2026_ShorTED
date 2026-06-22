@@ -7,7 +7,11 @@ import '../widgets/snack_feed_page.dart';
 import 'snack_detail_page.dart';
 
 class FeedScreen extends StatefulWidget {
-  const FeedScreen({super.key, required this.profile, required this.feedService});
+  const FeedScreen({
+    super.key,
+    required this.profile,
+    required this.feedService,
+  });
 
   final UserProfile profile;
   final FeedService feedService;
@@ -18,6 +22,7 @@ class FeedScreen extends StatefulWidget {
 
 class _FeedScreenState extends State<FeedScreen> {
   late final FeedController _controller;
+  int _lastSnackCount = 0;
 
   @override
   void initState() {
@@ -37,6 +42,10 @@ class _FeedScreenState extends State<FeedScreen> {
       animation: _controller,
       builder: (context, _) {
         final state = _controller.state;
+        if (state.snacks.length != _lastSnackCount) {
+          _lastSnackCount = state.snacks.length;
+          WidgetsBinding.instance.addPostFrameCallback((_) => _precacheThumbnailsAround(0));
+        }
         if (state.isInitialLoading) {
           return const Scaffold(body: Center(child: CircularProgressIndicator()));
         }
@@ -64,7 +73,10 @@ class _FeedScreenState extends State<FeedScreen> {
         return PageView.builder(
           scrollDirection: Axis.vertical,
           itemCount: state.snacks.length,
-          onPageChanged: _controller.onPageChanged,
+          onPageChanged: (index) {
+            _controller.onPageChanged(index);
+            _precacheThumbnailsAround(index);
+          },
           itemBuilder: (context, index) {
             return PageView(
               children: [
@@ -76,5 +88,16 @@ class _FeedScreenState extends State<FeedScreen> {
         );
       },
     );
+  }
+
+  void _precacheThumbnailsAround(int index) {
+    if (!mounted) return;
+    final snacks = _controller.state.snacks;
+    final end = (index + 5).clamp(0, snacks.length);
+    for (var i = index; i < end; i++) {
+      final thumbnailUrl = snacks[i].bestThumbnailUrl;
+      if (thumbnailUrl.isEmpty) continue;
+      precacheImage(NetworkImage(thumbnailUrl), context);
+    }
   }
 }

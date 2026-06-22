@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../domain/models/snack.dart';
+import '../screens/video_player_screen.dart';
 import 'glass_panel.dart';
-import 'ted_embed_background.dart';
 
 class SnackFeedPage extends StatelessWidget {
   const SnackFeedPage({super.key, required this.snack});
@@ -14,19 +14,21 @@ class SnackFeedPage extends StatelessWidget {
     return Stack(
       fit: StackFit.expand,
       children: [
-        TedEmbedBackground(snack: snack),
-        const DecoratedBox(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [Colors.black54, Colors.transparent, Colors.black87],
+        SnackVisualBackground(snack: snack),
+        const IgnorePointer(
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [Colors.black54, Colors.transparent, Colors.black87],
+              ),
             ),
           ),
         ),
         SafeArea(
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 20, 20, 96),
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -63,6 +65,59 @@ class SnackFeedPage extends StatelessWidget {
                     ],
                   ),
                 ),
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: double.infinity,
+                  child: FilledButton.icon(
+                    onPressed: () => showSnackVideoPlayer(context, snack),
+                    icon: const Icon(Icons.play_arrow),
+                    label: const Text('Play talk'),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class SnackVisualBackground extends StatelessWidget {
+  const SnackVisualBackground({super.key, required this.snack});
+
+  final Snack snack;
+
+  @override
+  Widget build(BuildContext context) {
+    final thumbnailUrl = snack.bestThumbnailUrl;
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        const DecoratedBox(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [Color(0xff080808), Color(0xff2a0d0a), Color(0xff101010)],
+            ),
+          ),
+        ),
+        if (thumbnailUrl.isNotEmpty)
+          Image.network(
+            thumbnailUrl,
+            fit: BoxFit.cover,
+            errorBuilder: (_, _, _) => const SizedBox.shrink(),
+          ),
+        DecoratedBox(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Colors.black.withValues(alpha: 0.24),
+                Colors.black.withValues(alpha: 0.22),
+                Colors.black.withValues(alpha: 0.82),
               ],
             ),
           ),
