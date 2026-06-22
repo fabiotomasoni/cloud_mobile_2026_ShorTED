@@ -1,79 +1,188 @@
-# VERSION 1.0
+# VERSION 1.1
 # Funzione app
 
-ShorTED è un'applicazione multipiattaforma scritta con Flutter che si interfaccia con l'infrastruttura costruita in AWS e MongoDB per funzioni e dati.
-Il suo scopo è quello di mostrare brevi frasi e video motivazionali riassunti e recuperati dal sito web di TEDx Talks come snakcable content, in stile TikTok o Instagram Reels.
+ShorTED e' un'applicazione multipiattaforma scritta con Flutter che si interfaccia con l'infrastruttura costruita in AWS e MongoDB per funzioni e dati.
 
+Il suo scopo e' mostrare brevi frasi, citazioni e video motivazionali ricavati da TED/TEDx Talks come snackable content, in stile TikTok, Instagram Reels o YouTube Shorts.
+
+La documentazione operativa della V1 e' descritta nel [piano V1][app-v1-plan], il contratto dati/API e' descritto nel [data contract][app-data-contract] e la struttura Flutter e' descritta nella [documentazione architetturale app][app-architecture].
 
 # Architettura Backend
 
-L'applicazione si basa su dati e funzioni in AWS, come vediamo nella [documentazione dell'architettura][architecture-docs].
-In particolare l'applicazione userà in modo diretto le api gateway che triggerano le lambda. 
-[get-all-tags][get-all-tags-lambda] per recuperare l'elenco di tutti i tag dei talks da mongodb.
-[get-talks-by-tags][get-talks-by-tags-lambda] per recuperare snacks e talks da mongodb in base ai tags passati.
+L'applicazione si basa su dati e funzioni in AWS, come descritto nella [documentazione dell'architettura][architecture-docs].
 
+## Backend usato nella V1
+
+La V1 non usa Cognito e non salva utenti in cloud. Il profilo utente resta locale nell'app.
+
+Endpoint usati direttamente dall'app:
+
+- [get_all_tags][get-all-tags-lambda]: recupera da MongoDB l'elenco completo dei tag disponibili.
+- [get_talks_by_tags][get-talks-by-tags-lambda]: recupera da MongoDB gli snack associati ai tag scelti.
+
+Endpoint reali V1:
+
+```text
+GET https://nk1cgmp9kh.execute-api.us-east-1.amazonaws.com/default/get_all_tags
+GET https://zjvrmg44s2.execute-api.us-east-1.amazonaws.com/default/get_talks_by_tags?tags=design,art&doc_per_page=20&page=1
+```
+
+La risposta, i campi e gli errori verificati sono documentati nel [data contract][app-data-contract].
+
+## Backend futuro
+
+La valutazione backend e la roadmap sono descritte nel [backend assessment][app-backend-assessment].
+
+In sintesi:
+
+- V1: profilo locale, feed composto lato app usando `get_talks_by_tags`.
+- V1.1: introduzione di `getFeed` per randomizzazione, ranking e composizione server-side.
+- V2: Cognito, utenti MongoDB, interessi cloud, snack visti, preferiti e sincronizzazione multi-dispositivo.
 
 # Funzionamento dell'app
 
 ## Design e struttura
 
-Fare riferimento alla [documentazione del design][design-instructions].
+Fare riferimento alla [documentazione del design][design-instructions] e ai [design mock][design-mock].
 
-## Logica e flusso d'utilizzo
+Lo stile target e' moderno, nativo e poco invasivo: feed fullscreen, overlay leggibili, pannelli glass/liquid, bottom navigation minimale.
 
-### Primo utilizzo
+## Primo utilizzo
 
-L'utente alla prima apertura dell'app deve configurare il proprio profilo, inserendo l'username e selezionando almeno 3 tags di suo interesse, recuperati con [get-all-tags-lambda].
-L'utente dovrebbe sempre avere almeno 3 tags selezionati, quindi ad ogni apertura bisogna verificare questo dato e, in caso, mostrare di nuovo la selezione tags.
+Alla prima apertura l'utente deve configurare il proprio profilo locale:
 
-### Salvataggio dati e profilo
+- inserire username;
+- selezionare almeno 3 tag di interesse recuperati con `get_all_tags`.
 
-I dati dell'utente, come appunto i tags selezionati e il profilo stesso, rimangono per ora salvati solo locamente nei dati dall'applicazione. In uno sviluppo futuro che comprende la configurazione e connessione all'app del servizio AWS Cognito, si può fare una transizione per salvare i dati dell'utente in cloud con sincronizzazione locale per maggior efficienza, portabilità e sicurezza dei dati. 
+L'utente deve sempre avere almeno 3 tag selezionati. Ad ogni avvio l'app verifica il profilo locale e, se mancano username o tag minimi, mostra nuovamente l'onboarding.
 
-### Utilizzo principale
+## Salvataggio dati e profilo V1
 
-#### Schermata Feed 
+Nella V1 i dati utente restano solo localmente nei dati dell'applicazione:
 
-Nella schermata del feed, con design come mostrato nelle [immagini di design mock][design-mock], dobbiamo mostrare all'utente i dati descritti nelle [istruzioni sul design][design-instructions] per la pagina principale del feed e del dettaglio.
-Lo stile è quello delle principali applicazioni social, TikTok, Instragram, YouTube Shorts. Scorrimento verticale continuo del feed con gli snacks, video con autoplay in secondo piano e aforisma in primo, scorrimento laterale per i dettagli, descrizione e informazioni in basso.
+- username;
+- tag selezionati;
+- tema light/dark.
 
-#### Video 
+Non vengono salvati in V1:
 
-I video vanno riprodotti automaticamente in sottofondo a schermo intero. Per farlo dobbiamo usare l'url contenuto nello snack [snack-data-example] nel campo "talkUrl" sostituendo www con embed, quindi ad esempio http://embed.ted.com/talks/isabel_allende_tales_of_passion?t=717
+- snack visti;
+- snack preferiti;
+- statistiche profilo;
+- identita' cloud.
+
+Questi elementi sono rimandati alla V2 con Cognito e MongoDB `users`.
+
+## Schermata Feed
+
+La schermata feed mostra snack in scorrimento verticale continuo.
+
+Ogni snack contiene:
+
+- video TED embed fullscreen sullo sfondo;
+- aforisma in primo piano;
+- speaker e titolo talk;
+- topic;
+- tag principali;
+- metadati espandibili o leggibili in overlay.
+
+La V1 recupera gli snack con `get_talks_by_tags`, usando i tag locali dell'utente. Il feed viene randomizzato con shuffle lato app. Questa logica e' temporanea: quando verra' introdotta `getFeed`, ranking e randomizzazione passeranno al backend.
+
+## Video
+
+I video devono restare nel contesto dell'app e occupare lo sfondo fullscreen della card feed.
+
+L'app usa l'URL contenuto nello snack nel campo `talkUrl`, sostituendo `www.ted.com` con `embed.ted.com`.
+
+Esempio:
+
+```text
+https://www.ted.com/talks/isabel_allende_tales_of_passion?t=717
+```
+
+diventa:
+
+```text
+https://embed.ted.com/talks/isabel_allende_tales_of_passion?t=717
+```
+
+La V1 implementa il video tramite WebView integrata fullscreen. L'obiettivo e' autoplay, ma se le policy della piattaforma o dell'embed TED lo impediscono, l'utente deve poter avviare il video con interazione diretta dentro l'embed, senza apertura di player nativo esterno.
+
+## Ottimizzazione Feed
+
+Per evitare attese, la V1 mantiene un buffer locale di snack.
+
+Parametri V1:
+
+- `doc_per_page = 20`;
+- prefetch quando restano circa 5 snack nel buffer;
+- shuffle lato app su ogni pagina caricata.
+
+## Schermata Dettaglio
+
+Scorrendo a destra su uno snack si visualizza il dettaglio.
+
+Il dettaglio contiene:
+
+- titolo talk;
+- speaker;
+- topic;
+- quote;
+- motivational text;
+- aphorism;
+- tag;
+- URL originale TED;
+- metadati tecnici utili se opportuno: lingua, start/end time.
+
+Rispetto al mock, la V1 esclude il pulsante `Read Transcript`, perche' l'architettura app attuale non espone transcript completi.
+
+Se lo swipe orizzontale dovesse creare conflitti importanti con WebView o scroll verticale, potra' essere sostituito in futuro da un pulsante informativo. La V1 parte comunque dallo swipe.
+
+## Navbar
+
+La navigazione usa una bottom navbar poco invasiva con due sezioni:
+
+- feed;
+- profilo.
+
+Le icone possono bastare senza label se la leggibilita' resta buona.
+
+## Schermata Profilo
+
+La schermata profilo visualizza:
+
+- username;
+- tag selezionati;
+- accesso alla modifica interessi;
+- pulsante impostazioni in alto a destra.
+
+La V1 non mostra statistiche reali di visualizzazioni o salvataggi, perche' questi dati non vengono ancora tracciati.
+
+## Schermata Impostazioni
+
+La schermata impostazioni permette di modificare:
+
+- username;
+- tema light/dark.
+
+Le preferenze sono salvate localmente.
+
+## Modifica tag salvati
+
+L'utente puo' aggiungere e togliere tag dai propri interessi locali.
+
+Regola obbligatoria:
+
+- devono restare sempre almeno 3 tag selezionati.
+
+Se l'utente tenta di scendere sotto 3 tag, l'app rifiuta l'operazione o disabilita la rimozione.
 
 
-#### Ottimizzazione
-
-Per evitare attese nel recupero degli snacks, è necessario implementare una logica ottimizzata, che salva in memoria n risultati a chiamata, invece che uno alla volta. Prepara i dati da mostrare e i video prima che siano attivamente visualizzati nell'app.
-
-#### Schermata Dettaglio
-
-Scorrendo a destra visualizziamo il dettaglio, descritto nella [documentazione del deisgn][design-instructions] e mostrato nel [design mock][design-mock].
-Deve contenere le informazioni complete del talk. Rispetto all'immagine di riferimento escludiamo solo il pulsante "Read Transcript" perchè la nostra architettura attualmente non lo permette, mentre abbiamo a disposizione tutti gli altri dati.
-
-#### Navbar 
-
-Per spostarsi da una schermata all'altra usiamo una navbar nella parte bassa dello schermo, con due opzioni: feed e profilo. Serve una navbar poco invadente per migliorare l'esperienza utente di visione degli snacks, possono bastare delle icone senza label per indicare le schermate.
-
-#### Schermata Profilo
-
-Nella schermata profilo visualizziamo il profilo dell'utente come descritto nella [documentazione del deisgn][design-instructions] e mostrato nel [design mock][design-mock]. 
-In questa schermata permettiamo di visualizzare e modificare i tag salvati dall'utente.
-In alto a destra un pulsante con icona dell'ingranaggio, senza label, permette all'utente di accedere alle impostazioni.
-
-#### Schermata Impostazioni 
-
-Nella schermata di impostazioni facciamo gestire all'utente il proprio profilo, permettendo di modificare le informazioni associate ad esso e tema light e dark, che sono preferenze da salvare nei dati locali dell'app e design da implementare. 
-
-#### Modifica tag salvati
-
-Permettiamo all'utente di aggiungere e togliere tag ai propri tag salvati. Dobbiamo sempre controllare che siano almeno 3 i tag salvati, altrimenti rifiutiamo l'operazione prima di eseguirla. 
-
-
-
-
-
-[design-instructions]: ../design/DESIGN.md 
+[app-v1-plan]: ./app_v1_plan.md
+[app-data-contract]: ./app_data_contract.md
+[app-backend-assessment]: ./app_backend_assessment.md
+[app-architecture]: ./app_architecture.md
+[design-instructions]: ../design/DESIGN.md
 [design-mock]: ../design/stitch_universal_mobile_design_system
 [snack-data-example]: ../../ai_pipeline/snack_example.json
 [architecture-docs]: ../../architecture/
