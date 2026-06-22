@@ -35,7 +35,9 @@ const chunkArray = (array, chunkSize) => {
 exports.handler = async (event) => {
     console.log("Lambda Dispatcher Definitiva (Paginazione + Batch)!");
 
-    const bucketName = process.env.PROCESSED_BUCKET_NAME;
+    const bucketName = process.env.ENRICHED_BUCKET_NAME || process.env.PROCESSED_BUCKET_NAME;
+    const prefix = process.env.ENRICHED_PREFIX || process.env.PROCESSED_PREFIX || undefined;
+    const language = process.env.DEFAULT_LANGUAGE || undefined;
     const queueUrl = process.env.SQS_QUEUE_URL;
 
     if (!bucketName || !queueUrl) {
@@ -48,11 +50,12 @@ exports.handler = async (event) => {
         let continuationToken = undefined;
         const filesToProcess = [];
 
-        console.log(`Inizio lettura dal bucket ${bucketName}...`);
+        console.log(`Inizio lettura dal bucket ${bucketName}${prefix ? ` con prefisso ${prefix}` : ''}...`);
 
         while (isTruncated) {
             const listCommand = new ListObjectsV2Command({
                 Bucket: bucketName,
+                Prefix: prefix,
                 ContinuationToken: continuationToken
             });
             const s3Response = await s3.send(listCommand);
@@ -83,7 +86,7 @@ exports.handler = async (event) => {
         const sqsPromises = batches.map(async (batch, batchIndex) => {
             const entries = batch.map((key, index) => ({
                 Id: `msg_${batchIndex}_${index}`,
-                MessageBody: JSON.stringify({ bucket: bucketName, file_key: key })
+                MessageBody: JSON.stringify({ bucket: bucketName, file_key: key, ...(language ? { language } : {}) })
             }));
 
             const batchCommand = new SendMessageBatchCommand({

@@ -73,6 +73,16 @@ def build_ai_context(processed_json: dict, preferred_language: str) -> AIContext
         language=language,
         sentences=sentences,
         raw_transcript=raw,
+        embed_url=processed_json.get("embedUrl", ""),
+        thumbnail_url=processed_json.get("thumbnailUrl", ""),
+        thumbnail_url_hd=processed_json.get("thumbnailUrlHd", ""),
+        thumbnail_url_full_hd=processed_json.get("thumbnailUrlFullHd", ""),
+        hls_url=processed_json.get("hlsUrl", ""),
+        mp4_url=processed_json.get("mp4Url", ""),
+        media_extracted_at=processed_json.get("mediaExtractedAt", ""),
+        media_extraction_version=processed_json.get("mediaExtractionVersion", ""),
+        media_extraction_status=processed_json.get("mediaExtractionStatus", ""),
+        media_extraction_error=processed_json.get("mediaExtractionError", ""),
     )
 
 

@@ -35,6 +35,16 @@ class AIContext:
     language: str                    # selected language code (e.g. "en", "it")
     sentences: list[dict]            # [{"timestamp_ms": int, "text": str}, ...]
     raw_transcript: str              # full raw text for the selected language
+    embed_url: str = ""
+    thumbnail_url: str = ""
+    thumbnail_url_hd: str = ""
+    thumbnail_url_full_hd: str = ""
+    hls_url: str = ""
+    mp4_url: str = ""
+    media_extracted_at: str = ""
+    media_extraction_version: str = ""
+    media_extraction_status: str = ""
+    media_extraction_error: str = ""
 
 
 @dataclass

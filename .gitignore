@@ -9,6 +9,7 @@ __pycache__/
 *.pyc
 *.pyo
 .python-version
+.venv/
 
 # Lambda build artifacts (created by pip install -t ./package)
 scripts/AWS/ShorTED/Lambda/Orchestrator/package/
@@ -17,3 +18,6 @@ scripts/AWS/ShorTED/MCP/package/
 
 # Test output (saved locally, not committed)
 scripts/AWS/ShorTED/Lambda/Orchestrator/test_output/
+
+# Logs
+*.log
